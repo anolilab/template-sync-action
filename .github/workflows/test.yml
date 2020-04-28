@@ -26,4 +26,5 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         owner: prisis
         repo: test
+        template: narrowspark/php-library-template
         branch: master
