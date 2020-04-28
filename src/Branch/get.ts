@@ -27,5 +27,7 @@ export async function get(
     })
   } catch (error) {
     core.setFailed(`Failed to get branch ${branch}; ${error.message}`)
+
+    process.exit(1) // there is currently no neutral exit code
   }
 }

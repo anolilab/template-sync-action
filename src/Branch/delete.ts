@@ -18,6 +18,8 @@ export async function _delete(
       repo
     })
   } catch (error) {
-    core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`)
+    core.setFailed(`Failed to delete branch ${syncBranch}; ${error.message}`)
+
+    process.exit(1) // there is currently no neutral exit code
   }
 }

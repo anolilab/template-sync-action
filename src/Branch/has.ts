@@ -23,6 +23,8 @@ export async function has(
     core.setFailed(
       `Failed to check if branch ${syncBranch} exist; ${error.message}`
     )
+
+    process.exit(1) // there is currently no neutral exit code
   }
 
   return null

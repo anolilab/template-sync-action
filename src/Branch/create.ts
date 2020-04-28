@@ -19,5 +19,7 @@ export async function create(
     })
   } catch (error) {
     core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`)
+
+    process.exit(1) // there is currently no neutral exit code
   }
 }

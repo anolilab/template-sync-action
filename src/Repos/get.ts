@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import {inspect} from 'util'
 import {Octokit} from '@octokit/core'
 
 interface Data {
@@ -20,6 +21,8 @@ export async function get(
       repo
     })
   } catch (error) {
-    core.setFailed(`Failed to get repository; ${error.message}`)
+    core.setFailed(`Failed to get repository; ${inspect(error)}`)
+
+    process.exit(1) // there is currently no neutral exit code
   }
 }

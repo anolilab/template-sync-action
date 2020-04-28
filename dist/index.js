@@ -1901,6 +1901,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
+const util_1 = __webpack_require__(669);
 function get(octokit, owner, repo
 // @ts-ignore
 ) {
@@ -1912,7 +1913,8 @@ function get(octokit, owner, repo
             });
         }
         catch (error) {
-            core.setFailed(`Failed to get repository; ${error.message}`);
+            core.setFailed(`Failed to get repository; ${util_1.inspect(error)}`);
+            process.exit(1); // there is currently no neutral exit code
         }
     });
 }
@@ -2154,7 +2156,8 @@ const Repos_1 = __webpack_require__(233);
 const MyOctokit = action_1.Octokit.plugin(plugin_retry_1.retry);
 const githubToken = core.getInput('github_token', { required: true });
 const octokit = new MyOctokit({
-    auth: githubToken
+    auth: githubToken,
+    previews: ['baptiste']
 });
 // @ts-ignore
 const [repoOwner, repoRepo] = process.env.GITHUB_REPOSITORY.split('/');
@@ -2207,16 +2210,17 @@ function run() {
                         syncBranchName +
                         ' and ' +
                         template) {
-                console.log('No commits between ' +
+                core.info('No commits between ' +
                     owner +
                     ':' +
                     syncBranchName +
                     ' and ' +
                     template);
+                process.exit(0); // there is currently no neutral exit code
             }
             else {
-                console.log(error);
-                core.setFailed('Failed to create a pull request');
+                core.setFailed(`Failed to create a pull request; ${util_1.inspect(error)}`);
+                process.exit(1); // there is currently no neutral exit code
             }
         }
     });
@@ -2441,7 +2445,8 @@ function _delete(octokit, owner, repo, sha, syncBranch) {
             });
         }
         catch (error) {
-            core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`);
+            core.setFailed(`Failed to delete branch ${syncBranch}; ${error.message}`);
+            process.exit(1); // there is currently no neutral exit code
         }
     });
 }
@@ -6825,6 +6830,7 @@ function get(octokit, owner, repo, branch
         }
         catch (error) {
             core.setFailed(`Failed to get branch ${branch}; ${error.message}`);
+            process.exit(1); // there is currently no neutral exit code
         }
     });
 }
@@ -7260,6 +7266,7 @@ function create(octokit, owner, repo, sha, syncBranch) {
         }
         catch (error) {
             core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`);
+            process.exit(1); // there is currently no neutral exit code
         }
     });
 }
@@ -7956,6 +7963,7 @@ function has(octokit, owner, repo, syncBranch) {
                 return false;
             }
             core.setFailed(`Failed to check if branch ${syncBranch} exist; ${error.message}`);
+            process.exit(1); // there is currently no neutral exit code
         }
         return null;
     });

@@ -9,7 +9,8 @@ const MyOctokit = Octokit.plugin(retry)
 
 const githubToken = core.getInput('github_token', {required: true})
 const octokit = new MyOctokit({
-  auth: githubToken
+  auth: githubToken,
+  previews: ['baptiste']
 })
 
 // @ts-ignore
@@ -84,7 +85,7 @@ async function run() {
           ' and ' +
           template
     ) {
-      console.log(
+      core.info(
         'No commits between ' +
           owner +
           ':' +
@@ -92,10 +93,12 @@ async function run() {
           ' and ' +
           template
       )
-    } else {
-      console.log(error)
 
-      core.setFailed('Failed to create a pull request')
+      process.exit(0) // there is currently no neutral exit code
+    } else {
+      core.setFailed(`Failed to create a pull request; ${inspect(error)}`)
+
+      process.exit(1) // there is currently no neutral exit code
     }
   }
 }
