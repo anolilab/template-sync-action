@@ -1,18 +1,19 @@
 import * as core from '@actions/core'
 import {inspect} from 'util'
 import {Octokit} from '@octokit/action'
+import {retry} from '@octokit/plugin-retry'
 import {createBranch, getBranch, hasBranch} from './Branch'
 import {getRepo} from './Repos'
 
-const ActionOctokit = Octokit.plugin(require('@octokit/plugin-retry'))
+const MyOctokit = Octokit.plugin(retry)
+
+const githubToken = core.getInput('github_token', {required: true})
+const octokit = new MyOctokit({
+  auth: githubToken
+})
 
 // @ts-ignore
 const [repoOwner, repoRepo] = process.env.GITHUB_REPOSITORY.split('/')
-
-const githubToken = core.getInput('github_token', {required: true})
-const octokit = new ActionOctokit({
-  auth: githubToken
-})
 
 const defaultMessage =
   'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {1}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).'

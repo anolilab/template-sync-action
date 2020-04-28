@@ -10,17 +10,20 @@ jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: |
-        npm install
-        npm run all
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+          with:
+            version: 12
+      - run: |
+          npm install
+          npm run all
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: ./
       with:
-        github_token: 1000
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         owner: prisis
         repo: test
         branch: master

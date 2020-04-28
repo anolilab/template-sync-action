@@ -2148,15 +2148,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const util_1 = __webpack_require__(669);
 const action_1 = __webpack_require__(725);
+const plugin_retry_1 = __webpack_require__(755);
 const Branch_1 = __webpack_require__(642);
 const Repos_1 = __webpack_require__(233);
-const ActionOctokit = action_1.Octokit.plugin(__webpack_require__(755));
-// @ts-ignore
-const [repoOwner, repoRepo] = process.env.GITHUB_REPOSITORY.split('/');
+const MyOctokit = action_1.Octokit.plugin(plugin_retry_1.retry);
 const githubToken = core.getInput('github_token', { required: true });
-const octokit = new ActionOctokit({
+const octokit = new MyOctokit({
     auth: githubToken
 });
+// @ts-ignore
+const [repoOwner, repoRepo] = process.env.GITHUB_REPOSITORY.split('/');
 const defaultMessage = 'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {1}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).';
 let syncBranchName = 'feature/template/sync/{0}';
 function run() {
