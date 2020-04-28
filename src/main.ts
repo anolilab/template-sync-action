@@ -37,6 +37,8 @@ async function run() {
       core.setFailed(
         'Template repository not found, please provide "template" key, that you want to check'
       )
+
+      process.exit(1) // there is currently no neutral exit code
     }
   }
 

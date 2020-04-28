@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/core'
+import {inspect} from 'util'
 
 interface Data {
   ref: string
@@ -26,7 +27,7 @@ export async function get(
       ref: `refs/heads/${branch}`
     })
   } catch (error) {
-    core.setFailed(`Failed to get branch ${branch}; ${error.message}`)
+    core.setFailed(`Failed to get branch ${branch}; ${inspect(error)}`)
 
     process.exit(1) // there is currently no neutral exit code
   }

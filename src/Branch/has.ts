@@ -1,17 +1,18 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/core'
+import {inspect} from 'util'
 
 export async function has(
   octokit: Octokit,
   owner: string,
   repo: string,
-  syncBranch: string
-): Promise<null | boolean> {
+  branch: string
+): Promise<boolean> {
   try {
     await octokit.repos.getBranch({
       owner,
       repo,
-      branch: syncBranch
+      branch: branch
     })
 
     return true
@@ -21,11 +22,9 @@ export async function has(
     }
 
     core.setFailed(
-      `Failed to check if branch ${syncBranch} exist; ${error.message}`
+      `Failed to check if branch ${branch} exist; ${inspect(error)}`
     )
 
     process.exit(1) // there is currently no neutral exit code
   }
-
-  return null
 }

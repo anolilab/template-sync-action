@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/core'
+import {inspect} from 'util'
 
 export async function create(
   octokit: Octokit,
@@ -18,7 +19,7 @@ export async function create(
       repo
     })
   } catch (error) {
-    core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`)
+    core.setFailed(`Failed to create branch ${syncBranch}; ${inspect(error)}`)
 
     process.exit(1) // there is currently no neutral exit code
   }
