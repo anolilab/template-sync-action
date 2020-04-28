@@ -1,0 +1,13 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "template-sync",
+            "pattern": [
+                {
+                    "regexp": "^(fatal|error): (.*)$",
+                    "message": 2
+                }
+            ]
+        }
+    ]
+}

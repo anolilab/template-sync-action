@@ -7,5 +7,6 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
+  roots: ['<rootDir>/__tests__'],
   verbose: true
 }

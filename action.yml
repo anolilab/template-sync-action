@@ -1,10 +1,93 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'github-templateRepositoryPath-sync-action'
+description: 'Keep your github templateRepositoryPath fork up to date'
+author: 'prisis'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  github_token:
+    description: >
+      Personal access token (PAT) used to fetch the repository. The PAT is configured
+      with the local git config, which enables your scripts to run authenticated git
+      commands. The post-job step removes the PAT.
+      We recommend using a service account with the least permissions necessary.
+      Also when generating a new PAT, select the least scopes necessary.
+      [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
+    default: ${{ github.token }}
+    required: false
+
+  ssh-key:
+    description: >
+      SSH key used to fetch the repository. The SSH key is configured with the local
+      git config, which enables your scripts to run authenticated git commands.
+      The post-job step removes the SSH key.
+      We recommend using a service account with the least permissions necessary.
+      [Learn more about creating and using
+      encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
+    required: false
+  ssh-known-hosts:
+    description: >
+      Known hosts in addition to the user and global host key database. The public
+      SSH keys for a host may be obtained using the utility `ssh-keyscan`. For example,
+      `ssh-keyscan github.com`. The public key for github.com is always implicitly added.
+    required: false
+  ssh-strict:
+    description: >
+      Whether to perform strict host key checking. When true, adds the options `StrictHostKeyChecking=yes`
+      and `CheckHostIP=no` to the SSH command line. Use the input `ssh-known-hosts` to
+      configure additional hosts.
+    default: 'true'
+    required: false
+  persist-credentials:
+    description: 'Whether to configure the token or SSH key with the local git config'
+    default: 'true'
+    required: false
+
+  git_author_name:
+    description: 'Includes your name to the commit'
+    required: true
+  git_author_email:
+    description: 'Includes your email to the commit'
+    required: true
+
+  owner:
+    description: 'Owner of the current repository'
+    required: false
+  repo:
+    description: 'The current repository name'
+    required: false
+
+  pr_title:
+    description: 'The title of the pull request'
+    required: false
+  pr_message:
+    description: 'The message in the pull request'
+    required: false
+
+  ref:
+    description: >
+      The branch, tag or SHA to checkout. When checking out the repository that
+      triggered a workflow, this defaults to the reference or SHA for that
+      event.  Otherwise, defaults to `master`.
+    required: true
+
+  template_repository:
+    description: ''
+    required: true
+  template_ref:
+    description: >
+      The branch, tag or SHA to checkout. When checking out the repository that
+      triggered a workflow, this defaults to the reference or SHA for that
+      event.  Otherwise, defaults to `master`.
+    required: false
+
+  ignore_list:
+    description: >
+      Extend the default list with eluded files that shouldn't be synced.
+    required: false
+
+branding:
+  icon: "git-ref"
+  color: yellow
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
+  post: dist/index.js
