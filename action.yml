@@ -1,10 +1,33 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'github-template-sync-action'
+description: 'Keep your github template fork up to date'
+author: 'prisis'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  github_token:
+    description: 'Token for the github API'
+    required: true
+  owner:
+    description: 'Owner of the forked repository'
+    required: false
+  repo:
+    description: 'Owner of the forked repository'
+    required: false
+  branch:
+    description: 'Branch to keep updated'
+    required: true
+  template:
+    description: 'Template to track'
+    required: false
+  pr_title:
+    description: 'The title of the pull request'
+    required: false
+  pr_message:
+    description: 'The message in the pull request'
+    required: false
+
+branding:
+  icon: "git-branch"
+  color: yellow
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
