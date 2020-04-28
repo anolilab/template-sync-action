@@ -12,7 +12,7 @@ export async function has(
     await octokit.repos.getBranch({
       owner,
       repo,
-      branch: branch
+      branch
     })
 
     return true

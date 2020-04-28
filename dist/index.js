@@ -2178,6 +2178,7 @@ function run() {
             }
             else {
                 core.setFailed('Template repository not found, please provide "template" key, that you want to check');
+                process.exit(1); // there is currently no neutral exit code
             }
         }
         syncBranchName = syncBranchName.replace('{0}', template);
@@ -2433,6 +2434,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
+const util_1 = __webpack_require__(669);
 function _delete(octokit, owner, repo, sha, syncBranch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -2445,7 +2447,7 @@ function _delete(octokit, owner, repo, sha, syncBranch) {
             });
         }
         catch (error) {
-            core.setFailed(`Failed to delete branch ${syncBranch}; ${error.message}`);
+            core.setFailed(`Failed to delete branch ${syncBranch}; ${util_1.inspect(error)}`);
             process.exit(1); // there is currently no neutral exit code
         }
     });
@@ -6817,6 +6819,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
+const util_1 = __webpack_require__(669);
 function get(octokit, owner, repo, branch
 // @ts-ignore
 ) {
@@ -6829,7 +6832,7 @@ function get(octokit, owner, repo, branch
             });
         }
         catch (error) {
-            core.setFailed(`Failed to get branch ${branch}; ${error.message}`);
+            core.setFailed(`Failed to get branch ${branch}; ${util_1.inspect(error)}`);
             process.exit(1); // there is currently no neutral exit code
         }
     });
@@ -7253,6 +7256,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
+const util_1 = __webpack_require__(669);
 function create(octokit, owner, repo, sha, syncBranch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -7265,7 +7269,7 @@ function create(octokit, owner, repo, sha, syncBranch) {
             });
         }
         catch (error) {
-            core.setFailed(`Failed to create branch ${syncBranch}; ${error.message}`);
+            core.setFailed(`Failed to create branch ${syncBranch}; ${util_1.inspect(error)}`);
             process.exit(1); // there is currently no neutral exit code
         }
     });
@@ -7948,13 +7952,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
-function has(octokit, owner, repo, syncBranch) {
+const util_1 = __webpack_require__(669);
+function has(octokit, owner, repo, branch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield octokit.repos.getBranch({
                 owner,
                 repo,
-                branch: syncBranch
+                branch
             });
             return true;
         }
@@ -7962,10 +7967,9 @@ function has(octokit, owner, repo, syncBranch) {
             if (error.name === 'HttpError' && error.status === 404) {
                 return false;
             }
-            core.setFailed(`Failed to check if branch ${syncBranch} exist; ${error.message}`);
+            core.setFailed(`Failed to check if branch ${branch} exist; ${util_1.inspect(error)}`);
             process.exit(1); // there is currently no neutral exit code
         }
-        return null;
     });
 }
 exports.has = has;
