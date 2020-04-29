@@ -238,6 +238,60 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 17:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+const util_1 = __webpack_require__(669);
+function create(octokit, owner, repo, title, head, base, body) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const errorMessage = `No commits between ${owner}:${head} and ${base}`;
+        try {
+            yield octokit.pulls.create({
+                owner,
+                repo,
+                title,
+                head,
+                base,
+                body
+            });
+        }
+        catch (error) {
+            if (!!error.errors && error.errors[0].message === errorMessage) {
+                core.info(errorMessage);
+                process.exit(0); // there is currently no neutral exit code
+            }
+            else {
+                core.setFailed(`Failed to create a pull request; ${util_1.inspect(error)}`);
+                process.exit(1); // there is currently no neutral exit code
+            }
+        }
+    });
+}
+exports.create = create;
+
+
+/***/ }),
+
 /***/ 18:
 /***/ (function(module) {
 
@@ -2152,26 +2206,32 @@ const util_1 = __webpack_require__(669);
 const action_1 = __webpack_require__(725);
 const plugin_retry_1 = __webpack_require__(755);
 const Branch_1 = __webpack_require__(642);
+const Pulls_1 = __webpack_require__(464);
 const Repos_1 = __webpack_require__(233);
-const MyOctokit = action_1.Octokit.plugin(plugin_retry_1.retry);
+const context_1 = __webpack_require__(482);
 const githubToken = core.getInput('github_token', { required: true });
+// plugins for octokit
+const MyOctokit = action_1.Octokit.plugin(plugin_retry_1.retry);
 const octokit = new MyOctokit({
     auth: githubToken,
     previews: ['baptiste']
 });
-// @ts-ignore
-const [repoOwner, repoRepo] = process.env.GITHUB_REPOSITORY.split('/');
+const context = new context_1.Context();
 const defaultMessage = 'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {1}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).';
 let syncBranchName = 'feature/template/sync/{0}';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const owner = core.getInput('owner', { required: false }) || repoOwner;
-        const repo = core.getInput('repo', { required: false }) || repoRepo;
+        const owner = core.getInput('owner', { required: false }) || context.repo.owner;
+        const repo = core.getInput('repo', { required: false }) || context.repo.repo;
         // The name of the branch you want the changes pulled into. This should be an existing branch on the current repository.
         // You cannot submit a pull request to one repository that requests a merge to a base of another repository.
         const branch = core.getInput('branch', { required: true });
         let template = core.getInput('template', { required: false });
         if (!template) {
+            core.debug(`Inputs for get repo request: ${util_1.inspect({
+                owner: owner,
+                repo: repo
+            })}`);
             const repoData = yield Repos_1.getRepo(octokit, owner, repo);
             if (repoData.is_template) {
                 template = repoData.template_repository.full_name;
@@ -2184,46 +2244,37 @@ function run() {
         syncBranchName = syncBranchName.replace('{0}', template);
         const prTitle = core.getInput('pr_title', { required: false }) ||
             'Enhancement: Synchronize with ' + template;
-        const prMessage = core.getInput('pr_message', { required: false }) || defaultMessage;
+        let prMessage = core.getInput('pr_message', { required: false }) || defaultMessage;
+        prMessage = prMessage.replace('{0}', template);
+        core.debug(`Inputs for has branch request: ${util_1.inspect({
+            owner: owner,
+            repo: repo,
+            branch: syncBranchName
+        })}`);
         if (!(yield Branch_1.hasBranch(octokit, owner, repo, syncBranchName))) {
+            core.debug(`Inputs for get branch request: ${util_1.inspect({
+                owner: owner,
+                repo: repo,
+                branch: branch,
+            })}`);
             const baseBranch = yield Branch_1.getBranch(octokit, owner, repo, branch);
+            core.debug(`Inputs for create branch request: ${util_1.inspect({
+                owner: owner,
+                repo: repo,
+                sha: baseBranch.object.sha,
+                branch: syncBranchName
+            })}`);
             yield Branch_1.createBranch(octokit, owner, repo, baseBranch.object.sha, syncBranchName);
         }
-        const inputs = {
+        core.debug(`Inputs for create pull request: ${util_1.inspect({
             owner: owner,
             repo: repo,
             title: prTitle,
             head: template,
             base: syncBranchName,
-            body: prMessage.replace('{0}', template),
-            maintainer_can_modify: false
-        };
-        core.debug(`Inputs for create pull request: ${util_1.inspect(inputs)}`);
-        try {
-            yield octokit.pulls.create(inputs);
-        }
-        catch (error) {
-            if (!!error.errors &&
-                error.errors[0].message ==
-                    'No commits between ' +
-                        owner +
-                        ':' +
-                        syncBranchName +
-                        ' and ' +
-                        template) {
-                core.info('No commits between ' +
-                    owner +
-                    ':' +
-                    syncBranchName +
-                    ' and ' +
-                    template);
-                process.exit(0); // there is currently no neutral exit code
-            }
-            else {
-                core.setFailed(`Failed to create a pull request; ${util_1.inspect(error)}`);
-                process.exit(1); // there is currently no neutral exit code
-            }
-        }
+            body: prMessage
+        })}`);
+        yield Pulls_1.createPull(octokit, owner, repo, prTitle, template, syncBranchName, prMessage);
     });
 }
 run();
@@ -6580,6 +6631,18 @@ exports.RequestError = RequestError;
 
 /***/ }),
 
+/***/ 464:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var create_1 = __webpack_require__(17);
+exports.createPull = create_1.create;
+
+
+/***/ }),
+
 /***/ 470:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -6793,6 +6856,46 @@ function getState(name) {
 }
 exports.getState = getState;
 //# sourceMappingURL=core.js.map
+
+/***/ }),
+
+/***/ 482:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __webpack_require__(747);
+const os_1 = __webpack_require__(87);
+class Context {
+    constructor() {
+        this.payload = {};
+        if (process.env.GITHUB_EVENT_PATH) {
+            if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
+                this.payload = JSON.parse(fs_1.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: 'utf8' }));
+            }
+            else {
+                const path = process.env.GITHUB_EVENT_PATH;
+                process.stdout.write(`GITHUB_EVENT_PATH ${path} does not exist${os_1.EOL}`);
+            }
+        }
+    }
+    get repo() {
+        if (process.env.GITHUB_REPOSITORY) {
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            return { owner, repo };
+        }
+        if (this.payload.repository) {
+            return {
+                owner: this.payload.repository.owner.login,
+                repo: this.payload.repository.name
+            };
+        }
+        throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
+    }
+}
+exports.Context = Context;
+
 
 /***/ }),
 
