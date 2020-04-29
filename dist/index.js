@@ -2278,7 +2278,7 @@ function run() {
             base: syncBranchName,
             body: prMessage
         })}`);
-        yield Pulls_1.createPull(octokit, owner, repo, prTitle, template, syncBranchName, prMessage);
+        yield Pulls_1.createPull(octokit, owner, repo, prTitle, template + ':' + templateBranch, syncBranchName, prMessage);
     });
 }
 run();

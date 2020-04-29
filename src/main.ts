@@ -123,7 +123,7 @@ async function run() {
     owner,
     repo,
     prTitle,
-    template,
+    template + ':' + templateBranch,
     syncBranchName,
     prMessage
   )
