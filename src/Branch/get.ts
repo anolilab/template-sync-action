@@ -3,13 +3,15 @@ import {Octokit} from '@octokit/core'
 import {inspect} from 'util'
 
 interface Data {
-  ref: string
-  node_id: string
-  url: string
-  object: {
-    type: string
-    sha: string
+  data: {
+    ref: string
+    node_id: string
     url: string
+    object: {
+      type: string
+      sha: string
+      url: string
+    }
   }
 }
 

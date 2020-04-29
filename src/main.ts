@@ -43,8 +43,8 @@ async function run() {
 
     core.debug(`Output for get repo response: ${inspect(repoData)}`)
 
-    if (repoData.template_repository !== undefined) {
-      template = repoData.template_repository.full_name
+    if (repoData.data.template_repository !== undefined) {
+      template = repoData.data.template_repository.full_name
     } else {
       core.setFailed(
         'Template repository not found, please provide "template" key, that you want to check'
@@ -88,7 +88,7 @@ async function run() {
       `Inputs for create branch request: ${inspect({
         owner: owner,
         repo: repo,
-        sha: baseBranch.object.sha,
+        sha: baseBranch.data.object.sha,
         branch: syncBranchName
       })}`
     )
@@ -97,7 +97,7 @@ async function run() {
       octokit,
       owner,
       repo,
-      baseBranch.object.sha,
+      baseBranch.data.object.sha,
       syncBranchName
     )
   }

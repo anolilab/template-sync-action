@@ -2234,8 +2234,8 @@ function run() {
             })}`);
             const repoData = yield Repos_1.getRepo(octokit, owner, repo);
             core.debug(`Output for get repo response: ${util_1.inspect(repoData)}`);
-            if (repoData.template_repository !== undefined) {
-                template = repoData.template_repository.full_name;
+            if (repoData.data.template_repository !== undefined) {
+                template = repoData.data.template_repository.full_name;
             }
             else {
                 core.setFailed('Template repository not found, please provide "template" key, that you want to check');
@@ -2263,10 +2263,10 @@ function run() {
             core.debug(`Inputs for create branch request: ${util_1.inspect({
                 owner: owner,
                 repo: repo,
-                sha: baseBranch.object.sha,
+                sha: baseBranch.data.object.sha,
                 branch: syncBranchName
             })}`);
-            yield Branch_1.createBranch(octokit, owner, repo, baseBranch.object.sha, syncBranchName);
+            yield Branch_1.createBranch(octokit, owner, repo, baseBranch.data.object.sha, syncBranchName);
         }
         core.debug(`Inputs for create pull request: ${util_1.inspect({
             owner: owner,
