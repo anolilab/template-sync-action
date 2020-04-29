@@ -26,7 +26,7 @@ export async function get(
     return await octokit.git.getRef({
       owner,
       repo,
-      ref: `refs/heads/${branch}`
+      ref: `heads/${branch}`
     })
   } catch (error) {
     core.setFailed(`Failed to get branch ${branch}; ${inspect(error)}`)

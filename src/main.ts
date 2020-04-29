@@ -28,8 +28,10 @@ async function run() {
   const repo = core.getInput('repo', {required: false}) || context.repo.repo
   // The name of the branch you want the changes pulled into. This should be an existing branch on the current repository.
   // You cannot submit a pull request to one repository that requests a merge to a base of another repository.
-  const branch = core.getInput('branch', {required: true})
+  let branch = core.getInput('branch', {required: true})
   let template = core.getInput('template', {required: false})
+
+  branch = branch.replace(/^refs\/heads\//, '')
 
   if (!template) {
     core.debug(
