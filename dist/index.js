@@ -2234,7 +2234,7 @@ function run() {
             })}`);
             const repoData = yield Repos_1.getRepo(octokit, owner, repo);
             core.debug(`Output for get repo response: ${util_1.inspect(repoData)}`);
-            if (repoData.is_template) {
+            if (repoData.template_repository !== undefined) {
                 template = repoData.template_repository.full_name;
             }
             else {

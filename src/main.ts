@@ -43,7 +43,7 @@ async function run() {
 
     core.debug(`Output for get repo response: ${inspect(repoData)}`)
 
-    if (repoData.is_template) {
+    if (repoData.template_repository !== undefined) {
       template = repoData.template_repository.full_name
     } else {
       core.setFailed(

@@ -3,8 +3,7 @@ import {inspect} from 'util'
 import {Octokit} from '@octokit/core'
 
 interface Data {
-  is_template: boolean
-  template_repository: {
+  template_repository?: {
     full_name: string
   }
 }
