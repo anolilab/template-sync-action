@@ -41,6 +41,8 @@ async function run() {
 
     const repoData = await getRepo(octokit, owner, repo)
 
+    core.debug(`Output for get repo response: ${inspect(repoData)}`)
+
     if (repoData.is_template) {
       template = repoData.template_repository.full_name
     } else {
@@ -79,6 +81,8 @@ async function run() {
     )
 
     const baseBranch = await getBranch(octokit, owner, repo, branch)
+
+    core.debug(`Output for get branch response: ${inspect(baseBranch)}`)
 
     core.debug(
       `Inputs for create branch request: ${inspect({

@@ -2233,6 +2233,7 @@ function run() {
                 repo: repo
             })}`);
             const repoData = yield Repos_1.getRepo(octokit, owner, repo);
+            core.debug(`Output for get repo response: ${util_1.inspect(repoData)}`);
             if (repoData.is_template) {
                 template = repoData.template_repository.full_name;
             }
@@ -2255,9 +2256,10 @@ function run() {
             core.debug(`Inputs for get branch request: ${util_1.inspect({
                 owner: owner,
                 repo: repo,
-                branch: branch,
+                branch: branch
             })}`);
             const baseBranch = yield Branch_1.getBranch(octokit, owner, repo, branch);
+            core.debug(`Output for get branch response: ${util_1.inspect(baseBranch)}`);
             core.debug(`Inputs for create branch request: ${util_1.inspect({
                 owner: owner,
                 repo: repo,
