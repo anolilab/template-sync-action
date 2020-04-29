@@ -2217,12 +2217,13 @@ const octokit = new MyOctokit({
     previews: ['baptiste']
 });
 const context = new context_1.Context();
-const defaultMessage = 'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {1}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).';
+const defaultMessage = 'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {0}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).';
 let syncBranchName = 'feature/template/sync/{0}';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const owner = core.getInput('owner', { required: false }) || context.repo.owner;
         const repo = core.getInput('repo', { required: false }) || context.repo.repo;
+        const templateBranch = core.getInput('template_branch', { required: false }) || 'master';
         // The name of the branch you want the changes pulled into. This should be an existing branch on the current repository.
         // You cannot submit a pull request to one repository that requests a merge to a base of another repository.
         let branch = core.getInput('branch', { required: true });
@@ -2273,7 +2274,7 @@ function run() {
             owner: owner,
             repo: repo,
             title: prTitle,
-            head: template,
+            head: template + ':' + templateBranch,
             base: syncBranchName,
             body: prMessage
         })}`);
