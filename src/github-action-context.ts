@@ -1,9 +1,9 @@
 import {readFileSync, existsSync} from 'fs'
-import {WebhookPayload} from './interfaces'
+import {IWebhookPayload} from './interfaces'
 import {EOL} from 'os'
 
-export class Context {
-  payload: WebhookPayload
+export class GithubActionContext {
+  payload: IWebhookPayload
 
   constructor() {
     this.payload = {}

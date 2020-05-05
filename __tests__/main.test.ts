@@ -3,7 +3,7 @@ import * as cp from 'child_process'
 import * as path from 'path'
 import * as core from '@actions/core'
 import fixtures from '@octokit/fixtures'
-import {Context} from '../src/context'
+import {Context} from '../src/Util/context'
 
 const context = new Context()
 
@@ -14,7 +14,7 @@ let inputs = {} as any
 
 const run = path.join(__dirname, '..', 'lib', 'main.js')
 
-describe('Update template fork', () => {
+describe('Update templateRepositoryPath fork', () => {
   beforeAll(() => {
     // Mock getInput
     jest.spyOn(core, 'getInput').mockImplementation((name: string) => {
@@ -46,7 +46,7 @@ describe('Update template fork', () => {
     jest.restoreAllMocks()
   })
 
-  it('should throw a setFailed on empty template var', () => {
+  it('should throw a setFailed on empty templateRepositoryPath var', () => {
     inputs.owner = 'owner'
     inputs.repo = 'repo'
     inputs['github_token'] = 'token'

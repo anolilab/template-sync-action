@@ -1,5 +1,5 @@
 name: "build-test"
-on: # rebuild any PRs and main branch changes
+on: # rebuild any PRs and main ref changes
   pull_request:
   push:
     branches:
@@ -17,14 +17,3 @@ jobs:
       - run: |
           npm install
           npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: ./
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-#        owner: prisis
-#        repo: test
-        template: narrowspark/php-library-template
-        branch: master

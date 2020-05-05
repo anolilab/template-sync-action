@@ -1,132 +1,242 @@
+import path from 'path'
+import fs from 'fs-extra'
 import * as core from '@actions/core'
+import * as coreCommand from '@actions/core/lib/command'
+import * as io from '@actions/io'
 import {inspect} from 'util'
-import {Octokit} from '@octokit/action'
-import {retry} from '@octokit/plugin-retry'
-import {createBranch, getBranch, hasBranch} from './Branch'
-import {createPull} from './Pulls'
-import {getRepo} from './Repos'
-import {Context} from './context'
+import FileHound from 'filehound'
+import {Settings} from './settings'
+import {GithubActionContext} from './github-action-context'
+import * as gitSourceProvider from './git-source-provider'
+import {GithubManager} from './github-manager'
+import {createCommandManager} from './git-command-manager'
+import {octokit} from './octokit'
+import * as stateHelper from './state-helper'
+import * as refHelper from './ref-helper'
+import {ISettings} from './interfaces'
 
-const githubToken = core.getInput('github_token', {required: true})
+const USER_EMAIL = 'user.email'
+const USER_NAME = 'user.name'
 
-// plugins for octokit
-const MyOctokit = Octokit.plugin(retry)
+const filehound = FileHound.create()
 
-const octokit = new MyOctokit({
-  auth: githubToken,
-  previews: ['baptiste']
-})
+async function run(): Promise<void> {
+  try {
+    const context = new GithubActionContext()
+    let settings: ISettings = new Settings(context)
+    const githubManager = new GithubManager(octokit(settings))
 
-const context = new Context()
+    settings = await prepareTemplateSettings(settings, githubManager)
 
-const defaultMessage =
-  'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {0}\n\n---\n\n You can set a custom pull request title, body, branch and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).'
-let syncBranchName = 'feature/template/sync/{0}'
+    core.debug(`Used settings: ${inspect(settings)}`)
 
-async function run() {
-  const owner = core.getInput('owner', {required: false}) || context.repo.owner
-  const repo = core.getInput('repo', {required: false}) || context.repo.repo
-  const templateBranch =
-    core.getInput('template_branch', {required: false}) || 'master'
+    try {
+      // Register problem matcher
+      coreCommand.issueCommand(
+        'add-matcher',
+        {},
+        path.join(__dirname, 'problem-matcher.json')
+      )
 
-  // The name of the branch you want the changes pulled into. This should be an existing branch on the current repository.
-  // You cannot submit a pull request to one repository that requests a merge to a base of another repository.
-  let branch = core.getInput('branch', {required: true})
-  let template = core.getInput('template', {required: false})
+      // download the main repo
+      // await gitSourceProvider.getSource(
+      //   mainGitCommandManager,
+      //   githubManager,
+      //   settings,
+      //   settings.templateRepositoryUrl,
+      //   settings.templateRepositoryPath,
+      //   settings.ref
+      // )
 
-  branch = branch.replace(/^refs\/heads\//, '')
+      if (
+        !(await githubManager.branch.has(
+          settings.repositoryOwner,
+          settings.repositoryName,
+          settings.syncBranchName
+        ))
+      ) {
+        const baseBranch = await githubManager.branch.get(
+          settings.repositoryOwner,
+          settings.repositoryName,
+          settings.ref.replace(/^refs\/heads\//, '')
+        )
+
+        await githubManager.branch.create(
+          settings.repositoryOwner,
+          settings.repositoryName,
+          baseBranch.data.object.sha,
+          settings.syncBranchName
+        )
+      }
+
+      const mainGitCommandManager = await createCommandManager(
+        settings.repositoryPath
+      )
+      const ref = `refs/heads/${settings.syncBranchName}`
+
+      await mainGitCommandManager.fetch(0, refHelper.getRefSpec(ref))
+
+      const checkoutInfo = await refHelper.getCheckoutInfo(
+        mainGitCommandManager,
+        ref
+      )
+
+      await mainGitCommandManager.checkout(
+        checkoutInfo.ref,
+        checkoutInfo.startPoint
+      )
+
+      // download the template repo
+      await gitSourceProvider.getSource(
+        githubManager,
+        settings,
+        settings.templateRepositoryUrl,
+        settings.templateRepositoryPath,
+        settings.templateRepositoryRef
+      )
+
+      // find all files
+      const files: string[] = filehound
+        .path(settings.templateRepositoryPath)
+        .discard(settings.ignoreList)
+        .findSync()
+
+      core.debug(`List of found files ${inspect(files)}`)
+
+      for (const file of files) {
+        fs.copySync(
+          file,
+          path.join(
+            settings.githubWorkspacePath,
+            file.replace(settings.templateRepositoryPath, '')
+          ),
+          {
+            overwrite: true
+          }
+        )
+      }
+
+      await io.rmRF(settings.templateRepositoryPath)
+
+      try {
+        core.startGroup('Setting up git user and email')
+        await mainGitCommandManager.config(
+          USER_EMAIL,
+          settings.authorEmail,
+          true
+        )
+        await mainGitCommandManager.config(USER_NAME, settings.authorName, true)
+        core.endGroup()
+
+        core.startGroup('Adding all changed files to main repository')
+        await mainGitCommandManager.addAll()
+        core.endGroup()
+
+        core.startGroup('Checking if changes exist that needs to applied')
+        if ((await mainGitCommandManager.status(['--porcelain'])) === '') {
+          core.setOutput(
+            'Git status',
+            `No changes found for ${settings.templateRepositoryUrl}`
+          )
+          process.exit(0) // there is currently no neutral exit code
+        }
+        core.endGroup()
+
+        core.startGroup('Creating a commit')
+        await mainGitCommandManager.commit(settings.messageHead)
+        core.endGroup()
+
+        core.startGroup('Pushing new commit')
+        await mainGitCommandManager.push(settings.syncBranchName)
+        core.endGroup()
+
+        // Dump some info about the checked out commit
+        await mainGitCommandManager.log1()
+      } finally {
+        await mainGitCommandManager.tryConfigUnset(USER_EMAIL, true)
+        await mainGitCommandManager.tryConfigUnset(USER_NAME, true)
+      }
+
+      await githubManager.pulls.create(
+        settings.repositoryOwner,
+        settings.repositoryName,
+        settings.syncBranchName,
+        settings.ref,
+        settings.messageHead,
+        settings.messageBody
+      )
+    } finally {
+      // Unregister problem matcher
+      coreCommand.issueCommand('remove-matcher', {owner: 'checkout-git'}, '')
+    }
+  } catch (error) {
+    core.setFailed(error.message)
+  }
+}
+
+async function prepareTemplateSettings(
+  settings: ISettings,
+  githubManager: GithubManager
+): Promise<ISettings> {
+  let template = core.getInput('template_repository', {required: false})
 
   if (!template) {
     core.debug(
       `Inputs for get repo request: ${inspect({
-        owner: owner,
-        repo: repo
+        owner: settings.repositoryOwner,
+        repo: settings.repositoryName
       })}`
     )
 
-    const repoData = await getRepo(octokit, owner, repo)
+    const repoData = await githubManager.repos.get(
+      settings.repositoryOwner,
+      settings.repositoryName
+    )
 
-    core.debug(`Output for get repo response: ${inspect(repoData)}`)
+    core.debug(`Output for get template repo response: ${inspect(repoData)}`)
 
     if (repoData.data.template_repository !== undefined) {
       template = repoData.data.template_repository.full_name
     } else {
       core.setFailed(
-        'Template repository not found, please provide "template" key, that you want to check'
+        'Template repository not found, please provide "templateRepositoryPath" key, that you want to check'
       )
 
       process.exit(1) // there is currently no neutral exit code
     }
   }
 
-  syncBranchName = syncBranchName.replace('{0}', template)
+  settings.templateRepository = template
 
-  const prTitle =
-    core.getInput('pr_title', {required: false}) ||
-    'Enhancement: Synchronize with ' + template
-  let prMessage =
-    core.getInput('pr_message', {required: false}) || defaultMessage
-  prMessage = prMessage.replace('{0}', template)
+  const [templateRepositoryOwner, templateRepositoryName] = template.split('/')
 
-  core.debug(
-    `Inputs for has branch request: ${inspect({
-      owner: owner,
-      repo: repo,
-      branch: syncBranchName
-    })}`
+  settings.templateRepositoryPath = path.resolve(
+    settings.githubWorkspacePath,
+    `${encodeURIComponent(templateRepositoryOwner)}/${encodeURIComponent(
+      templateRepositoryName
+    )}`
   )
 
-  if (!(await hasBranch(octokit, owner, repo, syncBranchName))) {
-    core.debug(
-      `Inputs for get branch request: ${inspect({
-        owner: owner,
-        repo: repo,
-        branch: branch
-      })}`
+  if (
+    !(settings.templateRepositoryPath + path.sep).startsWith(
+      settings.githubWorkspacePath + path.sep
     )
-
-    const baseBranch = await getBranch(octokit, owner, repo, branch)
-
-    core.debug(`Output for get branch response: ${inspect(baseBranch)}`)
-
-    core.debug(
-      `Inputs for create branch request: ${inspect({
-        owner: owner,
-        repo: repo,
-        sha: baseBranch.data.object.sha,
-        branch: syncBranchName
-      })}`
-    )
-
-    await createBranch(
-      octokit,
-      owner,
-      repo,
-      baseBranch.data.object.sha,
-      syncBranchName
+  ) {
+    throw new Error(
+      `Repository path '${settings.templateRepositoryPath}' is not under '${settings.githubWorkspacePath}'`
     )
   }
 
-  core.debug(
-    `Inputs for create pull request: ${inspect({
-      owner: owner,
-      repo: repo,
-      title: prTitle,
-      head: template + ':' + templateBranch,
-      base: syncBranchName,
-      body: prMessage
-    })}`
-  )
+  if (settings.sshKey) {
+    settings.templateRepositoryUrl = `git@${settings.serverUrl.hostname}:${settings.templateRepository}.git`
+  } else {
+    // "origin" is SCHEME://HOSTNAME[:PORT]
+    settings.templateRepositoryUrl = `${settings.serverUrl.origin}/${settings.templateRepository}`
+  }
 
-  await createPull(
-    octokit,
-    owner,
-    repo,
-    prTitle,
-    template + ':' + templateBranch,
-    syncBranchName,
-    prMessage
-  )
+  return settings
 }
 
-run()
+if (!stateHelper.IsPost) {
+  run()
+}
