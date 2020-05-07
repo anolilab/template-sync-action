@@ -104,8 +104,6 @@ export class GithubManager implements IGithubManager {
         title: string,
         body: string
       ): Promise<void> => {
-        const errorMessage = `No commits between ${owner}:${head} and ${base}`
-
         try {
           await this.octokit.pulls.create({
             owner,
@@ -116,8 +114,14 @@ export class GithubManager implements IGithubManager {
             body
           })
         } catch (error) {
-          if (!!error.errors && error.errors[0].message === errorMessage) {
-            core.info(errorMessage)
+          if (
+            !!error.errors &&
+            (error.errors[0].message.include('No commits between') ||
+              error.errors[0].message.include(
+                'A pull request already exists for'
+              ))
+          ) {
+            core.info(error.errors[0].message)
 
             process.exit(0) // there is currently no neutral exit code
           } else {

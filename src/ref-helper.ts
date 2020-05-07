@@ -14,7 +14,7 @@ export async function getCheckoutInfo(
   }
 
   if (!ref) {
-    throw new Error('Args ref cannot both be empty')
+    throw new Error('Args ref cannot be empty')
   }
 
   const result = ({} as unknown) as ICheckoutInfo
@@ -54,7 +54,7 @@ export async function getCheckoutInfo(
 
 export function getRefSpec(ref: string): string[] {
   if (!ref) {
-    throw new Error('Args ref cannot both be empty')
+    throw new Error('Arg ref cannot be empty')
   }
 
   const upperRef = (ref || '').toUpperCase()

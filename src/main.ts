@@ -14,6 +14,7 @@ import {octokit} from './octokit'
 import * as stateHelper from './state-helper'
 import * as refHelper from './ref-helper'
 import {ISettings} from './interfaces'
+import {cleanup} from './github-action-cleanup'
 
 const USER_EMAIL = 'user.email'
 const USER_NAME = 'user.name'
@@ -37,16 +38,6 @@ async function run(): Promise<void> {
         {},
         path.join(__dirname, 'problem-matcher.json')
       )
-
-      // download the main repo
-      // await gitSourceProvider.getSource(
-      //   mainGitCommandManager,
-      //   githubManager,
-      //   settings,
-      //   settings.templateRepositoryUrl,
-      //   settings.templateRepositoryPath,
-      //   settings.ref
-      // )
 
       if (
         !(await githubManager.branch.has(
@@ -181,25 +172,32 @@ async function prepareTemplateSettings(
   let template = core.getInput('template_repository', {required: false})
 
   if (!template) {
-    core.debug(
-      `Inputs for get repo request: ${inspect({
-        owner: settings.repositoryOwner,
-        repo: settings.repositoryName
-      })}`
-    )
-
     const repoData = await githubManager.repos.get(
       settings.repositoryOwner,
       settings.repositoryName
     )
 
-    core.debug(`Output for get template repo response: ${inspect(repoData)}`)
-
     if (repoData.data.template_repository !== undefined) {
       template = repoData.data.template_repository.full_name
     } else {
       core.setFailed(
-        'Template repository not found, please provide "templateRepositoryPath" key, that you want to check'
+        'Template repository not found, please provide "template_repository" key, that you want to check'
+      )
+
+      process.exit(1) // there is currently no neutral exit code
+    }
+  } else {
+    const [templateRepositoryOwner, templateRepositoryName] = template.split(
+      '/'
+    )
+    const repoData = await githubManager.repos.get(
+      templateRepositoryOwner,
+      templateRepositoryName
+    )
+
+    if (repoData.data.template_repository === undefined) {
+      core.setFailed(
+        'You need to provide a github template repository for "template_repository"'
       )
 
       process.exit(1) // there is currently no neutral exit code
@@ -239,4 +237,6 @@ async function prepareTemplateSettings(
 
 if (!stateHelper.IsPost) {
   run()
+} else {
+  cleanup(stateHelper.TemplateRepositoryPath)
 }

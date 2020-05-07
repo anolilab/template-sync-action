@@ -5048,7 +5048,6 @@ class GithubManager {
     get pulls() {
         return {
             create: (owner, repo, head, base, title, body) => __awaiter(this, void 0, void 0, function* () {
-                const errorMessage = `No commits between ${owner}:${head} and ${base}`;
                 try {
                     yield this.octokit.pulls.create({
                         owner,
@@ -5060,8 +5059,10 @@ class GithubManager {
                     });
                 }
                 catch (error) {
-                    if (!!error.errors && error.errors[0].message === errorMessage) {
-                        core.info(errorMessage);
+                    if (!!error.errors &&
+                        (error.errors[0].message.include('No commits between') ||
+                            error.errors[0].message.include('A pull request already exists for'))) {
+                        core.info(error.errors[0].message);
                         process.exit(0); // there is currently no neutral exit code
                     }
                     else {
@@ -5537,6 +5538,7 @@ const git_command_manager_1 = __webpack_require__(289);
 const octokit_1 = __webpack_require__(448);
 const stateHelper = __importStar(__webpack_require__(153));
 const refHelper = __importStar(__webpack_require__(227));
+const github_action_cleanup_1 = __webpack_require__(495);
 const USER_EMAIL = 'user.email';
 const USER_NAME = 'user.name';
 const filehound = filehound_1.default.create();
@@ -5551,15 +5553,6 @@ function run() {
             try {
                 // Register problem matcher
                 coreCommand.issueCommand('add-matcher', {}, path_1.default.join(__dirname, 'problem-matcher.json'));
-                // download the main repo
-                // await gitSourceProvider.getSource(
-                //   mainGitCommandManager,
-                //   githubManager,
-                //   settings,
-                //   settings.templateRepositoryUrl,
-                //   settings.templateRepositoryPath,
-                //   settings.ref
-                // )
                 if (!(yield githubManager.branch.has(settings.repositoryOwner, settings.repositoryName, settings.syncBranchName))) {
                     const baseBranch = yield githubManager.branch.get(settings.repositoryOwner, settings.repositoryName, settings.ref.replace(/^refs\/heads\//, ''));
                     yield githubManager.branch.create(settings.repositoryOwner, settings.repositoryName, baseBranch.data.object.sha, settings.syncBranchName);
@@ -5626,17 +5619,20 @@ function prepareTemplateSettings(settings, githubManager) {
     return __awaiter(this, void 0, void 0, function* () {
         let template = core.getInput('template_repository', { required: false });
         if (!template) {
-            core.debug(`Inputs for get repo request: ${util_1.inspect({
-                owner: settings.repositoryOwner,
-                repo: settings.repositoryName
-            })}`);
             const repoData = yield githubManager.repos.get(settings.repositoryOwner, settings.repositoryName);
-            core.debug(`Output for get template repo response: ${util_1.inspect(repoData)}`);
             if (repoData.data.template_repository !== undefined) {
                 template = repoData.data.template_repository.full_name;
             }
             else {
-                core.setFailed('Template repository not found, please provide "templateRepositoryPath" key, that you want to check');
+                core.setFailed('Template repository not found, please provide "template_repository" key, that you want to check');
+                process.exit(1); // there is currently no neutral exit code
+            }
+        }
+        else {
+            const [templateRepositoryOwner, templateRepositoryName] = template.split('/');
+            const repoData = yield githubManager.repos.get(templateRepositoryOwner, templateRepositoryName);
+            if (repoData.data.template_repository === undefined) {
+                core.setFailed('You need to provide a github template repository for "template_repository"');
                 process.exit(1); // there is currently no neutral exit code
             }
         }
@@ -5658,6 +5654,9 @@ function prepareTemplateSettings(settings, githubManager) {
 }
 if (!stateHelper.IsPost) {
     run();
+}
+else {
+    github_action_cleanup_1.cleanup(stateHelper.TemplateRepositoryPath);
 }
 
 
@@ -6099,7 +6098,7 @@ function getCheckoutInfo(git, ref) {
             throw new Error('Arg git cannot be empty');
         }
         if (!ref) {
-            throw new Error('Args ref cannot both be empty');
+            throw new Error('Args ref cannot be empty');
         }
         const result = {};
         const upperRef = (ref || '').toUpperCase();
@@ -6137,7 +6136,7 @@ function getCheckoutInfo(git, ref) {
 exports.getCheckoutInfo = getCheckoutInfo;
 function getRefSpec(ref) {
     if (!ref) {
-        throw new Error('Args ref cannot both be empty');
+        throw new Error('Arg ref cannot be empty');
     }
     const upperRef = (ref || '').toUpperCase();
     // Unqualified ref, check for a matching ref or tag
@@ -22269,7 +22268,69 @@ module.exports.checkSync = checkSync;
 /* 492 */,
 /* 493 */,
 /* 494 */,
-/* 495 */,
+/* 495 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_extra_1 = __importDefault(__webpack_require__(226));
+const path_1 = __importDefault(__webpack_require__(622));
+const core = __importStar(__webpack_require__(470));
+const io = __importStar(__webpack_require__(1));
+const git_command_manager_1 = __webpack_require__(289);
+const git_auth_helper_1 = __webpack_require__(287);
+const github_action_context_1 = __webpack_require__(821);
+const settings_1 = __webpack_require__(648);
+function cleanup(repositoryPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!repositoryPath ||
+            !fs_extra_1.default.existsSync(path_1.default.join(repositoryPath, '.git', 'config'))) {
+            return;
+        }
+        let git;
+        try {
+            git = yield git_command_manager_1.createCommandManager(repositoryPath);
+        }
+        catch (_a) {
+            return;
+        }
+        try {
+            const context = new github_action_context_1.GithubActionContext();
+            let settings = new settings_1.Settings(context);
+            // Remove auth
+            const authHelper = new git_auth_helper_1.GitAuthHelper(git, settings);
+            yield authHelper.removeAuth();
+            yield io.rmRF(repositoryPath);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+exports.cleanup = cleanup;
+
+
+/***/ }),
 /* 496 */,
 /* 497 */,
 /* 498 */,

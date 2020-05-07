@@ -75,17 +75,28 @@
 ```
 <!-- end usage -->
 
-# Create a JavaScript Action using TypeScript
+### Example Workflow
+```yml
+name: Template Sync
 
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
+on:
+  schedule:
+    - cron: '0 8 * * *'
 
-This template includes compilication support, tests, a validation workflow, publishing, and versioning guidance.  
+jobs:
+  sync:
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+    runs-on: ubuntu-latest
 
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
+    steps:
+      - uses: narrowspark/template-sync-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_author_name: prisis
+          git_author_email: d.bannert@anolilab.de
+          template_repository: narrowspark/php-library-template
+          ref: refs/heads/master
+```
 
 ## Code in Master
 

@@ -11,7 +11,8 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "pack": "ncc build",
-    "all": "npm run format && npm run lint && npm run build && npm run pack && node lib/misc/generate-docs.js"
+    "test": "jest",
+    "all": "npm run format && npm run lint && npm run build && npm run pack && npm test && node lib/misc/generate-docs.js"
   },
   "repository": {
     "type": "git",
