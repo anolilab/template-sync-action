@@ -1,5 +1,5 @@
-name: 'github-templateRepositoryPath-sync-action'
-description: 'Keep your github templateRepositoryPath fork up to date'
+name: 'github-template-sync-action'
+description: 'Keep your github template fork up to date'
 author: 'prisis'
 inputs:
   github_token:
