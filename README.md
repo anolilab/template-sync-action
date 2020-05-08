@@ -1,6 +1,10 @@
+<h1 align="center">Narrowspark Template Sync Action</h1>
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+    <a href="https://codecov.io/gh/narrowspark/template-sync"><img src="https://img.shields.io/codecov/c/github/narrowspark/template-sync-action/master.svg?style=flat-square"></a>
+    <a href="https://github.com/narrowspark/template-sync-action/actions"><img src="https://img.shields.io/github/workflow/status/narrowspark/template-sync-action/build-test/master?style=flat-square"></a>
+    <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
+
 
 ## Usage:
 

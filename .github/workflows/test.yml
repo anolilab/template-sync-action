@@ -7,7 +7,7 @@ on: # rebuild any PRs and main ref changes
       - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,3 +17,6 @@ jobs:
       - run: |
           npm install
           npm run all
+
+      - name: "Send code coverage report to Codecov.io"
+        uses: codecov/codecov-action@v1

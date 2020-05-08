@@ -1,4 +1,4 @@
-# Contributing to template-sync
+# Contributing to template-sync-action
 
 ## Contributor Code of Conduct
 
@@ -24,17 +24,17 @@ $ npm run format
 $ npm run lint
 ```
 
-## Using template-sync from a Git checkout
+## Using template-sync-action from a Git checkout
 
-The following commands can be used to perform the initial checkout of template-sync:
+The following commands can be used to perform the initial checkout of template-sync-action:
 
 ```bash
-$ git clone https://github.com/narrowspark/template-sync.git
+$ git clone https://github.com/narrowspark/template-sync-action.git
 
-$ cd template-sync
+$ cd template-sync-action
 ```
 
-Install template-sync dependencies using [npm](https://www.npmjs.com/):
+Install template-sync-action dependencies using [npm](https://www.npmjs.com/):
 
 ```bash
 $ npm install
@@ -42,7 +42,7 @@ $ npm install
 
 ## Running the test suite
 
-After following the steps shown above, The `template-sync` tests in the `__tests__` directory can be run using this command:
+After following the steps shown above, The `template-sync-action` tests in the `__tests__` directory can be run using this command:
 
 ```bash
 $ npm test
@@ -60,4 +60,4 @@ $ npm run all
 
 Please submit the issue using the appropriate template provided for a bug report or a feature request:
 
-* [Issues](https://github.com/narrowspark/template-sync/issues)
+* [Issues](https://github.com/narrowspark/template-sync-action/issues)
