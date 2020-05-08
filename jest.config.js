@@ -8,5 +8,6 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest'
   },
   roots: ['<rootDir>/__tests__'],
-  verbose: true
+  verbose: true,
+  collectCoverage: true
 }
