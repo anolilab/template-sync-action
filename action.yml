@@ -80,7 +80,7 @@ inputs:
 
   ignore_list:
     description: >
-      Extend the default list with eluded files that shouldn't be synced.
+      Extend the default list with excluded files that shouldn't be synced.
     required: false
 
 branding:

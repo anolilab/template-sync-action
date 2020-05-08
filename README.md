@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - uses: narrowspark/template-sync-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +100,7 @@ jobs:
     # Otherwise, defaults to `master`.
     template_ref: ''
 
-    # Extend the default list with eluded files that shouldn't be synced.
+    # Extend the default list with excluded files that shouldn't be synced.
     ignore_list: ''
 ```
 <!-- end usage -->
