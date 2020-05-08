@@ -102,4 +102,4 @@ repository:
 
   # https://developer.github.com/v3/repos/branches/#remove-branch-protection
 
-  topics: "php, library, template, narrowspark"
+  topics: "github, github-actions, template, narrowspark, sync"
