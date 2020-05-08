@@ -84,7 +84,7 @@ inputs:
     required: false
 
 branding:
-  icon: "git-ref"
+  icon: "refresh-ccw"
   color: yellow
 
 runs:
