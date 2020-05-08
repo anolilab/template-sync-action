@@ -5,8 +5,33 @@
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
 
+This [github action](https://github.com/features/actions) gives you the possibility to sync your repository with a [github template repository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 
-## Usage:
+
+## Example Workflow
+```yml
+name: 'Template Sync'
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: narrowspark/template-sync-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_author_name: prisis
+          git_author_email: d.bannert@anolilab.de
+          template_repository: narrowspark/php-library-template
+          ref: refs/heads/master
+```
+
+## Usage
 
 <!-- start usage -->
 ```yaml
@@ -78,26 +103,3 @@
     ignore_list: ''
 ```
 <!-- end usage -->
-
-### Example Workflow
-```yml
-name: 'Template Sync'
-
-on:
-  schedule:
-    - cron: '0 8 * * *'
-
-jobs:
-  sync:
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: narrowspark/template-sync-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          git_author_name: prisis
-          git_author_email: d.bannert@anolilab.de
-          template_repository: narrowspark/php-library-template
-          ref: refs/heads/master
-```
