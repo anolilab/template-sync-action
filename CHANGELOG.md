@@ -1,3 +1,10 @@
+## [1.0.0-alpha.5](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2020-05-13)
+
+
+### Bug Fixes
+
+* changed node version back to 12 ([b174d93](https://github.com/narrowspark/template-sync-action/commit/b174d9385ddb7f7b80ee5b9e4321cbdf48d4a562))
+
 ## [1.0.0-alpha.4](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2020-05-13)
 
 
