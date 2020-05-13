@@ -114,6 +114,8 @@ export class GithubManager implements IGithubManager {
             body
           })
         } catch (error) {
+          core.debug(inspect(error))
+
           if (
             !!error.errors &&
             (error.errors[0].message.include('No commits between') ||
