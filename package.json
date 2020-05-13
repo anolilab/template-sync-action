@@ -1,5 +1,5 @@
 {
-  "name": "github-template-sync-action",
+  "name": "template-sync-action",
   "version": "0.0.0",
   "private": true,
   "description": "Keep your github template fork up to date.",

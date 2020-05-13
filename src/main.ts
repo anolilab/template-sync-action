@@ -148,6 +148,7 @@ async function run(): Promise<void> {
         await mainGitCommandManager.tryConfigUnset(USER_NAME, true)
       }
 
+      core.startGroup('Creating Pull request')
       await githubManager.pulls.create(
         settings.repositoryOwner,
         settings.repositoryName,
@@ -156,6 +157,7 @@ async function run(): Promise<void> {
         settings.messageHead,
         settings.messageBody
       )
+      core.endGroup()
     } finally {
       // Unregister problem matcher
       coreCommand.issueCommand('remove-matcher', {owner: 'checkout-git'}, '')
