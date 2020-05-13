@@ -62,7 +62,7 @@ export class Settings implements ISettings {
         '.editorconfig',
         '.gitignore',
         'CHANGELOG.md',
-        'LICENSE.md',
+        'LICENSE.md.md',
         'README.md',
         'UPGRADE.md'
       ].concat(core.getInput('ignore_list', {required: false}) || []),
