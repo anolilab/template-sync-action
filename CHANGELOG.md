@@ -1,3 +1,10 @@
+## [1.0.0-alpha.2](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2020-05-13)
+
+
+### Bug Fixes
+
+* changed .releaserc to release.config.js ([acf953f](https://github.com/narrowspark/template-sync-action/commit/acf953f5b2d8f9ea6fbc0c4c17a54198a36c996f))
+
 ## 1.0.0-alpha.1 (2020-05-13)
 
 
