@@ -1,3 +1,10 @@
+## [1.0.0-alpha.4](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2020-05-13)
+
+
+### Features
+
+* added commitlint ([92f9f72](https://github.com/narrowspark/template-sync-action/commit/92f9f72215f79e5010af1da2de8effb68c7acde9))
+
 ## [1.0.0-alpha.3](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2020-05-13)
 
 
