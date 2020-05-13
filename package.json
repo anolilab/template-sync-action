@@ -3,21 +3,6 @@
   "version": "1.0.0-alpha.3",
   "private": true,
   "description": "Keep your github template fork up to date.",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint --fix src/**/*.ts",
-    "pack": "ncc build",
-    "test": "jest",
-    "all": "npm run format && npm run lint && npm run build && npm run pack && npm test && node lib/misc/generate-docs.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/narrowspark/template-sync-action.git"
-  },
   "keywords": [
     "actions",
     "node",
@@ -28,8 +13,42 @@
     "github-template",
     "github-templates"
   ],
-  "author": "prisis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/narrowspark/template-sync-action.git"
+  },
   "license": "MIT",
+  "author": "prisis",
+  "main": "lib/main.js",
+  "scripts": {
+    "all": "npm run format && npm run lint && npm run build && npm run pack && npm test && node lib/misc/generate-docs.js",
+    "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint --fix src/**/*.ts",
+    "pack": "ncc build",
+    "prepublishOnly": "if [ \"$CI\" = '' ]; then node -p 'JSON.parse(process.env.npm_package_config_manualPublishMessage)'; exit 1; fi",
+    "test": "jest"
+  },
+  "husky": {
+    "skipCI": true,
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run all"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "manualPublishMessage": "This repository is configured to use semantic-release for its releases. Please do not release manually.\n"
+  },
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/exec": "^1.0.4",
@@ -42,6 +61,9 @@
     "uuid": "^8.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/core": "^8.2.0",
     "@octokit/fixtures": "^21.0.5",
     "@octokit/types": "^2.16.2",
     "@types/bluebird": "^3.5.30",
@@ -53,6 +75,8 @@
     "@types/uuid": "^7.0.3",
     "@typescript-eslint/parser": "^2.33.0",
     "@zeit/ncc": "^0.22.1",
+    "conventional-changelog-conventionalcommits": "^4.3.0",
+    "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-github": "^3.4.1",
     "eslint-plugin-jest": "^23.11.0",
@@ -63,11 +87,5 @@
     "prettier": "^2.0.5",
     "ts-jest": "^25.5.1",
     "typescript": "^3.9.2"
-  },
-  "husky": {
-    "skipCI": true,
-    "hooks": {
-      "pre-commit": "npm run all"
-    }
   }
 }
