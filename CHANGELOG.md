@@ -1,3 +1,10 @@
+## [1.0.0-alpha.3](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2020-05-13)
+
+
+### Bug Fixes
+
+* added missing files to semantic git ([31cdad5](https://github.com/narrowspark/template-sync-action/commit/31cdad5ce851c220a47d8822e1b2bcf14410573f))
+
 ## [1.0.0-alpha.2](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2020-05-13)
 
 
