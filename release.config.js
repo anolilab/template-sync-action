@@ -43,6 +43,8 @@ module.exports = {
             {
                 "assets": [
                     "dist/*",
+                    "package.json",
+                    "package-lock.json",
                     "UPGRADE.md",
                     "LICENSE.md",
                     "README.md",
