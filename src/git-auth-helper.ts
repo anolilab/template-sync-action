@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import * as io from '@actions/io'
 import * as os from 'os'
 import * as path from 'path'
-import {default as uuid} from 'uuid/v4'
+import {v4 as uuidv4} from 'uuid'
 import {URL} from 'url'
 import {IGitCommandManager, ISettings} from './interfaces'
 import * as stateHelper from './state-helper'
@@ -73,7 +73,7 @@ export class GitAuthHelper {
     const runnerTemp = process.env['RUNNER_TEMP'] || ''
     assert.ok(runnerTemp, 'RUNNER_TEMP is not defined')
 
-    const uniqueId = uuid()
+    const uniqueId = uuidv4()
 
     stateHelper.setSshKeyPath(path.join(runnerTemp, uniqueId))
 

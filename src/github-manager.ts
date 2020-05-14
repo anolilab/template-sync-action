@@ -1,7 +1,7 @@
 import {Octokit} from '@octokit/core'
 import * as core from '@actions/core'
 import {inspect} from 'util'
-import {default as uuid} from 'uuid/v4'
+import {v4 as uuidv4} from 'uuid'
 import path from 'path'
 import fs from 'fs'
 import * as io from '@actions/io'
@@ -188,7 +188,7 @@ export class GithubManager implements IGithubManager {
         // Write archive to disk
         core.info('Writing archive to disk')
 
-        const uniqueId = uuid()
+        const uniqueId = uuidv4()
         const archivePath = path.join(repositoryPath, `${uniqueId}.tar.gz`)
 
         await fs.promises.writeFile(archivePath, archiveData)
