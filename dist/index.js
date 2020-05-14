@@ -5053,10 +5053,11 @@ class GithubManager {
                     return true;
                 }
                 catch (error) {
-                    if (error.name === 'HttpError' && error.status === 404) {
+                    const err = error;
+                    if (err.name === 'HttpError' && err.status === 404) {
                         return false;
                     }
-                    throw new Error(`Failed to check if branch ${branch} exist; ${util_1.inspect(error)}`);
+                    throw new Error(`Failed to check if branch ${branch} exist; ${util_1.inspect(err)}`);
                 }
             })
         };
@@ -5075,11 +5076,12 @@ class GithubManager {
                     });
                 }
                 catch (error) {
-                    core.debug(util_1.inspect(error));
-                    if (!!error.errors &&
-                        (error.errors[0].message.include('No commits between') ||
-                            error.errors[0].message.include('A pull request already exists for'))) {
-                        core.info(error.errors[0].message);
+                    const err = error;
+                    core.debug(util_1.inspect(err));
+                    if (err.name === 'HttpError' &&
+                        (err.message.includes('No commits between') ||
+                            err.message.includes('A pull request already exists for'))) {
+                        core.info(err.message);
                         process.exit(0); // there is currently no neutral exit code
                     }
                     else {

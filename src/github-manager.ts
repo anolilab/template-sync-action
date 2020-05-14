@@ -11,7 +11,8 @@ import {
   IGithubManager,
   IGithubManagerBranch,
   IGithubManagerPulls,
-  IGithubManagerRepos
+  IGithubManagerRepos,
+  OctokitHttpError
 } from './interfaces'
 
 const IS_WINDOWS = process.platform === 'win32'
@@ -82,12 +83,14 @@ export class GithubManager implements IGithubManager {
 
           return true
         } catch (error) {
-          if (error.name === 'HttpError' && error.status === 404) {
+          const err: OctokitHttpError = error
+
+          if (err.name === 'HttpError' && err.status === 404) {
             return false
           }
 
           throw new Error(
-            `Failed to check if branch ${branch} exist; ${inspect(error)}`
+            `Failed to check if branch ${branch} exist; ${inspect(err)}`
           )
         }
       }
@@ -114,16 +117,16 @@ export class GithubManager implements IGithubManager {
             body
           })
         } catch (error) {
-          core.debug(inspect(error))
+          const err: OctokitHttpError = error
+
+          core.debug(inspect(err))
 
           if (
-            !!error.errors &&
-            (error.errors[0].message.include('No commits between') ||
-              error.errors[0].message.include(
-                'A pull request already exists for'
-              ))
+            err.name === 'HttpError' &&
+            (err.message.includes('No commits between') ||
+              err.message.includes('A pull request already exists for'))
           ) {
-            core.info(error.errors[0].message)
+            core.info(err.message)
 
             process.exit(0) // there is currently no neutral exit code
           } else {

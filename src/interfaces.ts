@@ -1,4 +1,5 @@
 import {URL} from 'url'
+import {RequestOptions, ResponseHeaders} from '@octokit/types'
 
 export interface IPayloadRepository {
   full_name?: string
@@ -210,4 +211,26 @@ export interface ISettings {
   ignoreList: string[]
 
   clean: boolean
+}
+
+export interface OctokitHttpError extends Error {
+  name: string
+  /**
+   * http status code
+   */
+  status: number
+  /**
+   * http status code
+   *
+   * @deprecated `error.code` is deprecated in favor of `error.status`
+   */
+  code: number
+  /**
+   * error response headers
+   */
+  headers: ResponseHeaders
+  /**
+   * Request options that lead to the error.
+   */
+  request: RequestOptions
 }
