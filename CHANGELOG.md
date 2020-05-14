@@ -1,3 +1,10 @@
+## [1.0.0-alpha.6](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2020-05-14)
+
+
+### Bug Fixes
+
+* fixed uuid import ([43eb921](https://github.com/narrowspark/template-sync-action/commit/43eb9216ccdefdec3cdd34ca24f97279244e91b0))
+
 ## [1.0.0-alpha.5](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2020-05-13)
 
 
