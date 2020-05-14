@@ -1,3 +1,10 @@
+## [1.0.0-alpha.7](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2020-05-14)
+
+
+### Bug Fixes
+
+* fixed error handling in github-manager.ts ([6972d59](https://github.com/narrowspark/template-sync-action/commit/6972d59b0ab409e80094858f20bd80a6584056af))
+
 ## [1.0.0-alpha.6](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2020-05-14)
 
 
