@@ -1,13 +1,19 @@
-import { Octokit } from "@octokit/core";
-import * as core from "@actions/core";
-import { inspect } from "util";
-import { v4 as uuidv4 } from "uuid";
-import path from "path";
-import fs from "fs";
-import * as io from "@actions/io";
-import * as toolCache from "@actions/tool-cache";
-import assert from "assert";
-import { IGithubManager, IGithubManagerBranch, IGithubManagerPulls, IGithubManagerRepos } from "./interfaces";
+import {Octokit} from '@octokit/core'
+import * as core from '@actions/core'
+import {inspect} from 'util'
+import {v4 as uuidv4} from 'uuid'
+import path from 'path'
+import fs from 'fs'
+import * as io from '@actions/io'
+import * as toolCache from '@actions/tool-cache'
+import assert from 'assert'
+import {
+  IGithubManager,
+  IGithubManagerBranch,
+  IGithubManagerPulls,
+  IGithubManagerRepos,
+  OctokitHttpError
+} from './interfaces'
 
 const IS_WINDOWS = process.platform === "win32";
 
@@ -19,63 +25,67 @@ export class GithubManager implements IGithubManager {
     }
 
     get branch(): IGithubManagerBranch {
-        return {
-            create: async (owner: string, repo: string, sha: string, syncBranch: string) => {
-                try {
-                    core.debug(`Creating branch ${syncBranch}`);
+      return {
+        create: async (owner: string, repo: string, sha: string, syncBranch: string) => {
+          try {
+            core.debug(`Creating branch ${syncBranch}`);
 
-                    await this.octokit.git.createRef({
-                        ref: `refs/heads/${syncBranch}`,
-                        sha,
-                        owner,
-                        repo,
-                    });
-                } catch (error) {
-                    throw new Error(`Failed to create branch ${syncBranch}; ${inspect(error)}`);
-                }
-            },
-            delete: async (owner: string, repo: string, branch: string) => {
-                try {
-                    core.debug(`Delete branch ${branch}`);
+            await this.octokit.git.createRef({
+              ref: `refs/heads/${syncBranch}`,
+              sha,
+              owner,
+              repo,
+            });
+          } catch (error) {
+            throw new Error(`Failed to create branch ${syncBranch}; ${inspect(error)}`);
+          }
+        },
+        delete: async (owner: string, repo: string, branch: string) => {
+          try {
+            core.debug(`Delete branch ${branch}`);
 
-                    await this.octokit.git.deleteRef({
-                        owner,
-                        repo,
-                        ref: `refs/heads/${branch}`,
-                    });
-                } catch (error) {
-                    throw new Error(`Failed to delete branch ${branch}; ${inspect(error)}`);
-                }
-            },
-            get: async (owner: string, repo: string, branch: string) => {
-                try {
-                    return await this.octokit.git.getRef({
-                        owner,
-                        repo,
-                        ref: `heads/${branch}`,
-                    });
-                } catch (error) {
-                    throw new Error(`Failed to get branch ${branch}; ${inspect(error)}`);
-                }
-            },
-            has: async (owner: string, repo: string, branch: string) => {
-                try {
-                    await this.octokit.repos.getBranch({
-                        owner,
-                        repo,
-                        branch,
-                    });
+            await this.octokit.git.deleteRef({
+              owner,
+              repo,
+              ref: `refs/heads/${branch}`,
+            });
+          } catch (error) {
+            throw new Error(`Failed to delete branch ${branch}; ${inspect(error)}`);
+          }
+        },
+        get: async (owner: string, repo: string, branch: string) => {
+          try {
+            return await this.octokit.git.getRef({
+              owner,
+              repo,
+              ref: `heads/${branch}`,
+            });
+          } catch (error) {
+            throw new Error(`Failed to get branch ${branch}; ${inspect(error)}`);
+          }
+        },
+        has: async (owner: string, repo: string, branch: string) => {
+          try {
+            await this.octokit.repos.getBranch({
+              owner,
+              repo,
+              branch,
+            });
 
-                    return true;
-                } catch (error) {
-                    if (error.name === "HttpError" && error.status === 404) {
-                        return false;
-                    }
+            return true
+          } catch (error) {
+            const err: OctokitHttpError = error
 
-                    throw new Error(`Failed to check if branch ${branch} exist; ${inspect(error)}`);
-                }
-            },
-        };
+            if (err.name === 'HttpError' && err.status === 404) {
+              return false
+            }
+
+            throw new Error(
+              `Failed to check if branch ${branch} exist; ${inspect(err)}`
+            )
+          }
+        }
+      }
     }
 
   get pulls(): IGithubManagerPulls {
@@ -98,16 +108,16 @@ export class GithubManager implements IGithubManager {
             body
           })
         } catch (error) {
-          core.debug(inspect(error))
+          const err: OctokitHttpError = error
+
+          core.debug(inspect(err))
 
           if (
-            !!error.errors &&
-            (error.errors[0].message.include('No commits between') ||
-              error.errors[0].message.include(
-                'A pull request already exists for'
-              ))
+            err.name === 'HttpError' &&
+            (err.message.includes('No commits between') ||
+              err.message.includes('A pull request already exists for'))
           ) {
-            core.info(error.errors[0].message)
+            core.info(err.message)
 
                         process.exit(0); // there is currently no neutral exit code
                     } else {
