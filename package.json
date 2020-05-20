@@ -39,7 +39,7 @@
     "@octokit/plugin-retry": "^3.0.1",
     "filehound": "^1.17.4",
     "fs-extra": "^9.0.0",
-    "uuid": "^8.0.0"
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@octokit/fixtures": "^21.0.5",
