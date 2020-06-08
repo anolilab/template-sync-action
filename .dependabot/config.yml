@@ -14,8 +14,9 @@ update_configs:
       - match:
           dependency_type: "development"
     commit_message:
+      prefix: "fix"
+      prefix_development: "chore"
       include_scope: true
-      prefix: "Build"
     default_labels:
       - "dependency"
       - "Changed"
