@@ -46,7 +46,7 @@
     "@octokit/types": "^4.1.9",
     "@types/bluebird": "^3.5.31",
     "@types/fs-extra": "^9.0.1",
-    "@types/jest": "^25.2.3",
+    "@types/jest": "^26.0.13",
     "@types/js-yaml": "^3.12.4",
     "@types/node": "^14.0.7",
     "@types/promise-retry": "^1.1.3",
