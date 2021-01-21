@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@octokit/fixtures": "^21.0.5",
-    "@octokit/types": "^4.1.9",
+    "@octokit/types": "^6.4.1",
     "@types/bluebird": "^3.5.31",
     "@types/fs-extra": "^9.0.1",
     "@types/jest": "^26.0.16",
