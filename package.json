@@ -42,7 +42,7 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
-    "@octokit/fixtures": "^21.0.5",
+    "@octokit/fixtures": "^21.3.4",
     "@octokit/types": "^4.1.9",
     "@types/bluebird": "^3.5.31",
     "@types/fs-extra": "^9.0.1",
