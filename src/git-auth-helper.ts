@@ -2,14 +2,14 @@ import * as assert from 'assert'
 import * as core from '@actions/core'
 import * as coreCommand from '@actions/core/lib/command'
 import * as exec from '@actions/exec'
-import * as fs from 'fs'
-import * as io from '@actions/io'
+import fs from 'fs-extra'
 import * as os from 'os'
 import * as path from 'path'
 import {v4 as uuidv4} from 'uuid'
 import {URL} from 'url'
 import {IGitCommandManager, ISettings} from './interfaces'
 import * as stateHelper from './state-helper'
+import which from 'which'
 
 const IS_WINDOWS = process.platform === 'win32'
 const SSH_COMMAND_KEY = 'core.sshCommand'
@@ -92,7 +92,7 @@ export class GitAuthHelper {
 
     // Remove inherited permissions on Windows
     if (IS_WINDOWS) {
-      const icacls = await io.which('icacls.exe')
+      const icacls = which.sync('icacls.exe')
 
       await exec.exec(
         `"${icacls}" "${this.sshKeyPath}" /grant:r "${process.env['USERDOMAIN']}\\${process.env['USERNAME']}:F"`
@@ -139,7 +139,7 @@ export class GitAuthHelper {
     await fs.promises.writeFile(this.sshKnownHostsPath, knownHosts)
 
     // Configure GIT_SSH_COMMAND
-    const sshPath = await io.which('ssh', true)
+    const sshPath = which.sync('ssh')
 
     this.sshCommand = `"${sshPath}" -i "$RUNNER_TEMP/${path.basename(
       this.sshKeyPath
@@ -219,7 +219,7 @@ export class GitAuthHelper {
     const keyPath = this.sshKeyPath || stateHelper.SshKeyPath
     if (keyPath) {
       try {
-        await io.rmRF(keyPath)
+        await fs.remove(keyPath)
       } catch (err) {
         core.debug(err.message)
         core.warning(`Failed to remove SSH key '${keyPath}'`)
@@ -231,7 +231,7 @@ export class GitAuthHelper {
       this.sshKnownHostsPath || stateHelper.SshKnownHostsPath
     if (knownHostsPath) {
       try {
-        await io.rmRF(knownHostsPath)
+        await fs.remove(knownHostsPath)
       } catch {
         // Intentionally empty
       }

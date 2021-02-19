@@ -4,6 +4,7 @@ import {EOL} from 'os'
 
 export class GithubActionContext {
   payload: IWebhookPayload
+  ref: string
 
   constructor() {
     this.payload = {}
@@ -19,6 +20,7 @@ export class GithubActionContext {
         process.stdout.write(`GITHUB_EVENT_PATH ${path} does not exist${EOL}`)
       }
     }
+    this.ref = process.env.GITHUB_REF as string
   }
 
   get repo(): {owner: string; repo: string} {

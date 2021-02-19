@@ -1,8 +1,11 @@
 import * as core from '@actions/core'
 import {URL} from 'url'
-import {GithubActionContext} from './github-action-context'
-import {ISettings} from './interfaces'
 import path from 'path'
+import YAML from 'yaml'
+import fs from 'fs-extra';
+import {GithubActionContext} from './github-action-context'
+import {Filter, ISettings, IYamlSettings} from './interfaces'
+import {inspect} from 'util'
 
 export class Settings implements ISettings {
   settings: ISettings
@@ -11,15 +14,9 @@ export class Settings implements ISettings {
     const message =
       'This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {0}\n\n---\n\n You can set a custom pull request title, body, ref and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).'
 
-    let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
+    let githubWorkspacePath = Settings.getGithubWorkspacePath()
 
-    if (!githubWorkspacePath) {
-      throw new Error('GITHUB_WORKSPACE not defined')
-    }
-
-    githubWorkspacePath = path.resolve(githubWorkspacePath)
-
-    core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`)
+    let {ignoreList, filters} = Settings.loadYamlSettings(path.join(githubWorkspacePath, '.github', 'template-sync-settings.yml'))
 
     this.settings = {
       authToken: core.getInput('github_token', {required: true}),
@@ -40,13 +37,12 @@ export class Settings implements ISettings {
       repositoryOwner: core.getInput('owner') || context.repo.owner,
       repositoryName: core.getInput('repo') || context.repo.repo,
       githubWorkspacePath,
-      repositoryPath: githubWorkspacePath,
 
       messageHead:
         core.getInput('pr_title') || 'Enhancement: Synchronize with "{0}"',
       messageBody: core.getInput('pr_message') || message,
 
-      ref: core.getInput('ref', {required: true}),
+      ref: core.getInput('ref') || context.ref,
       syncBranchName: 'feature/template/sync/{0}',
 
       templateRepositoryRef:
@@ -65,9 +61,60 @@ export class Settings implements ISettings {
         'LICENSE.md.md',
         'README.md',
         'UPGRADE.md'
-      ].concat(core.getInput('ignore_list', {required: false}) || []),
-      clean: (core.getInput('clean') || 'true').toUpperCase() === 'TRUE'
+      ].concat(ignoreList),
+      clean: (core.getInput('clean') || 'true').toUpperCase() === 'TRUE',
+      filters
     }
+  }
+
+  public static getGithubWorkspacePath(): string {
+    let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
+
+    if (!githubWorkspacePath) {
+      throw new Error('GITHUB_WORKSPACE not defined')
+    }
+
+    githubWorkspacePath = path.resolve(githubWorkspacePath)
+
+    core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`)
+
+    return githubWorkspacePath
+  }
+
+  public static loadYamlSettings(dotGithubPath: string): {filters: Filter[], ignoreList: string[]} {
+    let ignoreList: string[] = []
+    const filters: Filter[] = []
+
+    try {
+      const stats = fs.lstatSync(dotGithubPath)
+
+      if (stats.isFile()) {
+        const yamlSettings: IYamlSettings = YAML.parse(fs.readFileSync(dotGithubPath, 'utf8'))
+        const yamlFilters = yamlSettings.filters || []
+
+        yamlFilters.forEach((filter) => {
+          if (typeof filter === 'object' && filter !== null) {
+            if (typeof filter.filepath !== 'undefined' && typeof filter.filter !== 'undefined') {
+              filters.push({
+                filePath: filter.filepath,
+                filter: filter.filter,
+                strict: Boolean(filter.strict || false),
+                count: 0,
+                maxCount: filter.count || 1
+              } as Filter)
+            } else {
+              core.info(`Please provide the correct syntax for ${inspect(filter)}; Check the readme of https://github.com/narrowspark/template-sync-action.`)
+            }
+          }
+        })
+
+        return {ignoreList: yamlSettings.ignore_list as string[] || [], filters}
+      }
+    } catch (e) {
+      core.info(`No settings file found under ${dotGithubPath}, continue without it...`)
+    }
+
+    return {ignoreList, filters}
   }
 
   get authToken(): string {
@@ -88,10 +135,6 @@ export class Settings implements ISettings {
 
   get repositoryName(): string {
     return this.settings.repositoryName
-  }
-
-  get repositoryPath(): string {
-    return this.settings.repositoryPath
   }
 
   get githubWorkspacePath(): string {
@@ -175,8 +218,20 @@ export class Settings implements ISettings {
     return this.settings.persistCredentials
   }
 
+  set ignoreList(ignoreList: string[]) {
+    this.settings.ignoreList = ignoreList
+  }
+
   get ignoreList(): string[] {
     return this.settings.ignoreList
+  }
+
+  set filters(filters: Filter[]) {
+    this.settings.filters = filters
+  }
+
+  get filters(): Filter[] {
+    return this.settings.filters
   }
 
   get clean(): boolean {

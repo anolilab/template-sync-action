@@ -1,7 +1,7 @@
 import {GitVersion} from './git-version'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
-import * as io from '@actions/io'
+import which from 'which'
 import fs from 'fs-extra'
 import path from 'path'
 import {RetryHelper} from './retry-helper'
@@ -47,7 +47,7 @@ export class GitCommandManager implements IGitCommandManager {
     workingDirectory: string
   ): Promise<void> {
     this.workingDirectory = workingDirectory
-    this.gitPath = await io.which('git', true)
+    this.gitPath = which.sync('git')
 
     // Git version
     core.debug('Getting git version')

@@ -1,0 +1,7 @@
+filters:
+  -
+    filepath: string
+    filter: string
+  -
+    filepath: string
+    filter: string

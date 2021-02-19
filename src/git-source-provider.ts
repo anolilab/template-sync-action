@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import * as io from '@actions/io'
 import * as path from 'path'
 import fs from 'fs-extra'
 import {IGitCommandManager, IGithubManager, ISettings} from './interfaces'
@@ -21,7 +20,7 @@ export async function getSource(
 
   // Remove conflicting file path
   if (fs.existsSync(repositoryPath)) {
-    await io.rmRF(repositoryPath)
+    await fs.remove(repositoryPath)
   }
 
   // Create directory
@@ -30,7 +29,7 @@ export async function getSource(
   if (!fs.existsSync(repositoryPath)) {
     isExisting = false
 
-    await io.mkdirP(repositoryPath)
+    await fs.mkdirp(repositoryPath)
   }
 
   // Git command manager
@@ -43,7 +42,7 @@ export async function getSource(
     core.info(`Deleting the contents of '${repositoryPath}'`)
 
     for (const file of await fs.promises.readdir(repositoryPath)) {
-      await io.rmRF(path.join(repositoryPath, file))
+      await fs.remove(path.join(repositoryPath, file))
     }
   }
 

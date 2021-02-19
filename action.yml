@@ -65,8 +65,8 @@ inputs:
     description: >
       The branch, tag or SHA to checkout. When checking out the repository that
       triggered a workflow, this defaults to the reference or SHA for that
-      event.  Otherwise, defaults to `master`.
-    required: true
+      event. Otherwise, defaults to `master`.
+    required: false
 
   template_repository:
     description: ''
@@ -75,7 +75,7 @@ inputs:
     description: >
       The branch, tag or SHA to checkout. When checking out the repository that
       triggered a workflow, this defaults to the reference or SHA for that
-      event.  Otherwise, defaults to `master`.
+      event. Otherwise, defaults to `master`.
     required: false
 
   ignore_list:

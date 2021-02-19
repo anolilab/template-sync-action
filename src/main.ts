@@ -1,10 +1,8 @@
 import path from 'path'
-import fs from 'fs-extra'
 import * as core from '@actions/core'
 import * as coreCommand from '@actions/core/lib/command'
-import * as io from '@actions/io'
+import fs from 'fs-extra'
 import {inspect} from 'util'
-import FileHound from 'filehound'
 import {Settings} from './settings'
 import {GithubActionContext} from './github-action-context'
 import * as gitSourceProvider from './git-source-provider'
@@ -15,11 +13,10 @@ import * as stateHelper from './state-helper'
 import * as refHelper from './ref-helper'
 import {ISettings} from './interfaces'
 import {cleanup} from './github-action-cleanup'
+import {sync} from './sync'
 
 const USER_EMAIL = 'user.email'
 const USER_NAME = 'user.name'
-
-const filehound = FileHound.create()
 
 async function run(): Promise<void> {
   try {
@@ -61,7 +58,7 @@ async function run(): Promise<void> {
       }
 
       const mainGitCommandManager = await createCommandManager(
-        settings.repositoryPath
+        settings.githubWorkspacePath
       )
       const ref = `refs/heads/${settings.syncBranchName}`
 
@@ -86,28 +83,11 @@ async function run(): Promise<void> {
         settings.templateRepositoryRef
       )
 
-      // find all files
-      const files: string[] = filehound
-        .path(settings.templateRepositoryPath)
-        .discard(settings.ignoreList)
-        .findSync()
+      core.startGroup('Creating and applying patches for found files')
+      await sync(settings)
 
-      core.debug(`List of found files ${inspect(files)}`)
-
-      for (const file of files) {
-        fs.copySync(
-          file,
-          path.join(
-            settings.githubWorkspacePath,
-            file.replace(settings.templateRepositoryPath, '')
-          ),
-          {
-            overwrite: true
-          }
-        )
-      }
-
-      await io.rmRF(settings.templateRepositoryPath)
+      await fs.remove(settings.templateRepositoryPath)
+      core.endGroup()
 
       try {
         core.startGroup('Setting up git user and email')

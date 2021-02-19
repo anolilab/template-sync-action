@@ -105,6 +105,18 @@ export interface IGithubManager {
   repos: IGithubManagerRepos
 }
 
+export const DIFF_DELETE = -1
+export const DIFF_INSERT = 1
+export const DIFF_EQUAL = 0
+
+export interface Filter {
+  filePath: string
+  filter: string,
+  strict: boolean,
+  count: number,
+  maxCount: number
+}
+
 export interface ISettings {
   /**
    * The auth token to use when fetching the repository.
@@ -156,8 +168,6 @@ export interface ISettings {
    * The current repository name.
    */
   repositoryName: string
-
-  repositoryPath: string
 
   /**
    * GitHub workspace.
@@ -211,6 +221,16 @@ export interface ISettings {
   ignoreList: string[]
 
   clean: boolean
+
+  /**
+   * List of patch filters
+   */
+  filters: Filter[]
+}
+
+export interface IYamlSettings {
+  filters?: {[key: string]: string}[]
+  ignore_list?: string[]
 }
 
 export interface OctokitHttpError extends Error {

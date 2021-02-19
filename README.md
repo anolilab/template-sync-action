@@ -105,3 +105,7 @@ jobs:
     ignore_list: ''
 ```
 <!-- end usage -->
+
+# Diff Filters
+
+> Note: The diff algorithm is ported from [diff-match-patch](https://github.com/google/diff-match-patch) package created by Neil Fraser.

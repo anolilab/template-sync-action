@@ -3,8 +3,7 @@ import * as core from '@actions/core'
 import {inspect} from 'util'
 import {v4 as uuidv4} from 'uuid'
 import path from 'path'
-import fs from 'fs'
-import * as io from '@actions/io'
+import fs from 'fs-extra'
 import * as toolCache from '@actions/tool-cache'
 import assert from 'assert'
 import {
@@ -202,7 +201,7 @@ export class GithubManager implements IGithubManager {
 
         const extractPath = path.join(repositoryPath, uniqueId)
 
-        await io.mkdirP(extractPath)
+        await fs.mkdirp(extractPath)
 
         if (IS_WINDOWS) {
           await toolCache.extractZip(archivePath, extractPath)
@@ -210,7 +209,7 @@ export class GithubManager implements IGithubManager {
           await toolCache.extractTar(archivePath, extractPath)
         }
 
-        io.rmRF(archivePath)
+        await fs.remove(archivePath)
 
         // Determine the path of the repository content. The archive contains
         // a top-level folder and the repository content is inside.
@@ -233,13 +232,13 @@ export class GithubManager implements IGithubManager {
           const targetPath = path.join(repositoryPath, fileName)
 
           if (IS_WINDOWS) {
-            await io.cp(sourcePath, targetPath, {recursive: true}) // Copy on Windows (Windows Defender may have a lock)
+            await fs.copy(sourcePath, targetPath) // Copy on Windows (Windows Defender may have a lock)
           } else {
-            await io.mv(sourcePath, targetPath)
+            await fs.move(sourcePath, targetPath)
           }
         }
 
-        io.rmRF(extractPath)
+        await fs.remove(extractPath)
       }
     }
   }

@@ -1,7 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
 import * as core from '@actions/core'
-import * as io from '@actions/io'
 import {createCommandManager} from './git-command-manager'
 import {IGitCommandManager, ISettings} from './interfaces'
 import {GitAuthHelper} from './git-auth-helper'
@@ -30,7 +29,7 @@ export async function cleanup(repositoryPath: string): Promise<void> {
     const authHelper = new GitAuthHelper(git, settings)
     await authHelper.removeAuth()
 
-    await io.rmRF(repositoryPath)
+    await fs.remove(repositoryPath)
   } catch (error) {
     core.setFailed(error.message)
   }

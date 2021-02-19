@@ -22,6 +22,10 @@ function updateUsage(
   // Load the action.yml
   const actionYaml = yaml.safeLoad(fs.readFileSync(actionYamlPath).toString())
 
+  if (typeof actionYaml !== 'object') {
+    throw new Error('')
+  }
+
   // Load the README
   const originalReadme = fs.readFileSync(readmePath).toString()
 
@@ -47,8 +51,11 @@ function updateUsage(
 
   // Build the new usage section
   newReadme.push('```yaml', `- uses: ${actionReference}`, '  with:')
-  const inputs = actionYaml.inputs
+
+  const inputs = (actionYaml as { inputs: { [key: string]: any } }).inputs
+
   let firstInput = true
+
   for (const key of Object.keys(inputs)) {
     const input = inputs[key]
 
