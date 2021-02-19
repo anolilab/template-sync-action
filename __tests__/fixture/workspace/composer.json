@@ -1,0 +1,88 @@
+{
+    "name": "testomat/terminal-colour",
+    "type": "library",
+    "description": "Return your terminal message in style! Change the text style, text color and text background color from the terminal, console or shell interface with ANSI color codes.",
+    "keywords": [
+        "narrowspark",
+        "testomat",
+        "color",
+        "terminal",
+        "colour",
+        "ansi",
+        "style",
+        "truecolor",
+        "color256",
+        "color16"
+    ],
+    "homepage": "http://github.com/testomat/terminal-colour",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "thecodingmachine/safe": "^1.1.1"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "phpunit/phpunit": "^9.1.4"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1-dev"
+        },
+        "prefetcher": {
+            "require": {
+                "phpunit/phpunit": "^8.0 || ^9.0"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Testomat\\TerminalColour\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Testomat\\TerminalColour\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "changelog": "composer --working-dir=./.build changelog",
+        "coverage": [
+            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",
+            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"
+        ],
+        "cs": "composer --working-dir=./.build cs -- -v",
+        "cs:check": "composer --working-dir=./.build cs:check -- -v",
+        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",
+        "psalm": "composer --working-dir=./.build psalm",
+        "psalm:fix": "composer --working-dir=./.build psalm:fix",
+        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=89 --min-msi=89",
+        "rector-src": "composer --working-dir=./.build rector-src",
+        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",
+        "rector-tests": "composer --working-dir=./.build rector-tests",
+        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",
+        "test": "phpunit",
+        "post-install-cmd": "composer --working-dir=./.build install --lock",
+        "post-update-cmd": "composer --working-dir=./.build update --lock"
+    },
+    "support": {
+        "issues": "https://github.com/testomat/terminal-colour/issues",
+        "source": "https://github.com/testomat/terminal-colour"
+    }
+}

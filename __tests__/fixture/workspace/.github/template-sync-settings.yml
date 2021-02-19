@@ -1,0 +1,30 @@
+filters:
+  -
+    filepath: composer.json
+    filter: narrowspark/php-library-template
+  -
+    filepath: composer.json
+    filter: narrowspark/php-library-template
+  -
+    filepath: composer.json
+    filter: Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions
+  -
+    filepath: composer.json
+    filter: 4
+    strict: true
+  -
+    filepath: composer.json
+    filter: 0
+    strict: true
+  -
+    filepath: composer.json
+    filter: Narrowspark\\Library
+  -
+    filepath: composer.json
+    filter: Narrowspark\\Library
+  -
+    filepath: composer.json
+    filter: narrowspark
+  -
+    filepath: composer.json
+    filter: narrowspark/php-library-template

@@ -114,7 +114,7 @@ export const sync = async (settings: ISettings) => {
       diffs = diffs.filter(Boolean)
 
       core.debug(`Diff list after filters are applied; ${inspect(diffs)}`)
-console.log(diff.patchMake(diffs)[0].diffs)
+      console.log(diff.patchMake(diffs)[0].diffs)
 
       if (diffs.length !== 0) {
         const [text, results] = diff.patchApply(

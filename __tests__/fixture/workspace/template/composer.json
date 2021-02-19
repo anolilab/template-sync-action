@@ -1,0 +1,83 @@
+{
+    "name": "narrowspark/php-library-template",
+    "type": "library",
+    "description": "Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions.",
+    "keywords": [
+        "narrowspark"
+    ],
+    "homepage": "http://github.com/narrowspark/php-library-template",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "thecodingmachine/safe": "^1.1.1"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "phpunit/phpunit": "^9.1.5",
+        "thecodingmachine/phpstan-safe-rule": "^1.0.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "prefetcher": {
+            "require": {
+                "phpunit/phpunit": "^8.0 || ^9.0"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Narrowspark\\Library\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Narrowspark\\Library\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": "composer --working-dir=./.build install --lock",
+        "post-update-cmd": "composer --working-dir=./.build update --lock",
+        "changelog": "composer --working-dir=./.build changelog",
+        "coverage": [
+            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",
+            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"
+        ],
+        "cs": "composer --working-dir=./.build cs -- -v",
+        "cs:check": "composer --working-dir=./.build cs:check -- -v",
+        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=73 --min-msi=61",
+        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",
+        "phpstan:baseline": "composer --working-dir=./.build phpstan:baseline -- --memory-limit=-1",
+        "psalm": "composer --working-dir=./.build psalm",
+        "psalm:baseline": "composer --working-dir=./.build psalm:baseline",
+        "psalm:fix": "composer --working-dir=./.build psalm:fix",
+        "rector-src": "composer --working-dir=./.build rector-src",
+        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",
+        "rector-tests": "composer --working-dir=./.build rector-tests",
+        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",
+        "req:check": "composer --working-dir=./.build req:check",
+        "test": "phpunit"
+    },
+    "support": {
+        "issues": "https://github.com/narrowspark/php-library-template/issues",
+        "source": "https://github.com/narrowspark/php-library-template"
+    }
+}

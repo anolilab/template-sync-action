@@ -111,9 +111,9 @@ export const DIFF_EQUAL = 0
 
 export interface Filter {
   filePath: string
-  filter: string,
-  strict: boolean,
-  count: number,
+  filter: string
+  strict: boolean
+  count: number
   maxCount: number
 }
 

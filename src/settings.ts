@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import {URL} from 'url'
 import path from 'path'
 import YAML from 'yaml'
-import fs from 'fs-extra';
+import fs from 'fs-extra'
 import {GithubActionContext} from './github-action-context'
 import {Filter, ISettings, IYamlSettings} from './interfaces'
 import {inspect} from 'util'
@@ -16,7 +16,9 @@ export class Settings implements ISettings {
 
     let githubWorkspacePath = Settings.getGithubWorkspacePath()
 
-    let {ignoreList, filters} = Settings.loadYamlSettings(path.join(githubWorkspacePath, '.github', 'template-sync-settings.yml'))
+    let {ignoreList, filters} = Settings.loadYamlSettings(
+      path.join(githubWorkspacePath, '.github', 'template-sync-settings.yml')
+    )
 
     this.settings = {
       authToken: core.getInput('github_token', {required: true}),
@@ -81,7 +83,9 @@ export class Settings implements ISettings {
     return githubWorkspacePath
   }
 
-  public static loadYamlSettings(dotGithubPath: string): {filters: Filter[], ignoreList: string[]} {
+  public static loadYamlSettings(
+    dotGithubPath: string
+  ): {filters: Filter[]; ignoreList: string[]} {
     let ignoreList: string[] = []
     const filters: Filter[] = []
 
@@ -89,12 +93,17 @@ export class Settings implements ISettings {
       const stats = fs.lstatSync(dotGithubPath)
 
       if (stats.isFile()) {
-        const yamlSettings: IYamlSettings = YAML.parse(fs.readFileSync(dotGithubPath, 'utf8'))
+        const yamlSettings: IYamlSettings = YAML.parse(
+          fs.readFileSync(dotGithubPath, 'utf8')
+        )
         const yamlFilters = yamlSettings.filters || []
 
-        yamlFilters.forEach((filter) => {
+        yamlFilters.forEach(filter => {
           if (typeof filter === 'object' && filter !== null) {
-            if (typeof filter.filepath !== 'undefined' && typeof filter.filter !== 'undefined') {
+            if (
+              typeof filter.filepath !== 'undefined' &&
+              typeof filter.filter !== 'undefined'
+            ) {
               filters.push({
                 filePath: filter.filepath,
                 filter: filter.filter,
@@ -103,15 +112,24 @@ export class Settings implements ISettings {
                 maxCount: filter.count || 1
               } as Filter)
             } else {
-              core.info(`Please provide the correct syntax for ${inspect(filter)}; Check the readme of https://github.com/narrowspark/template-sync-action.`)
+              core.info(
+                `Please provide the correct syntax for ${inspect(
+                  filter
+                )}; Check the readme of https://github.com/narrowspark/template-sync-action.`
+              )
             }
           }
         })
 
-        return {ignoreList: yamlSettings.ignore_list as string[] || [], filters}
+        return {
+          ignoreList: (yamlSettings.ignore_list as string[]) || [],
+          filters
+        }
       }
     } catch (e) {
-      core.info(`No settings file found under ${dotGithubPath}, continue without it...`)
+      core.info(
+        `No settings file found under ${dotGithubPath}, continue without it...`
+      )
     }
 
     return {ignoreList, filters}

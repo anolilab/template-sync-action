@@ -317,212 +317,212 @@ describe('sync tests', () => {
     fs.writeFileSync(
       path.join(dotGithubPath, 'template-sync-settings.yml'),
       'filters:\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: narrowspark/php-library-template\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: narrowspark/php-library-template\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: 4\n' +
-      '    strict: true\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: 0\n' +
-      '    strict: true\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: Narrowspark\\\\Library\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: Narrowspark\\\\Library\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: narrowspark\n' +
-      '  -\n' +
-      '    filepath: composer.json\n' +
-      '    filter: narrowspark/php-library-template\n'
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: narrowspark/php-library-template\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: narrowspark/php-library-template\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: 4\n' +
+        '    strict: true\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: 0\n' +
+        '    strict: true\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: Narrowspark\\\\Library\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: Narrowspark\\\\Library\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: narrowspark\n' +
+        '  -\n' +
+        '    filepath: composer.json\n' +
+        '    filter: narrowspark/php-library-template\n'
     )
     fs.writeFileSync(
       path.join(templateRepositoryPath, 'composer.json'),
       '{\n' +
-      '    "name": "narrowspark/php-library-template",\n' +
-      '    "type": "library",\n' +
-      '    "description": "Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions.",\n' +
-      '    "keywords": [\n' +
-      '        "narrowspark"\n' +
-      '    ],\n' +
-      '    "homepage": "http://github.com/narrowspark/php-library-template",\n' +
-      '    "license": "MIT",\n' +
-      '    "authors": [\n' +
-      '        {\n' +
-      '            "name": "Daniel Bannert",\n' +
-      '            "email": "d.bannert@anolilab.de",\n' +
-      '            "homepage": "http://www.anolilab.de",\n' +
-      '            "role": "Developer"\n' +
-      '        }\n' +
-      '    ],\n' +
-      '    "require": {\n' +
-      '        "php": "^7.4",\n' +
-      '        "thecodingmachine/safe": "^1.1.1"\n' +
-      '    },\n' +
-      '    "require-dev": {\n' +
-      '        "ext-json": "*",\n' +
-      '        "phpunit/phpunit": "^9.1.5",\n' +
-      '        "thecodingmachine/phpstan-safe-rule": "^1.0.0"\n' +
-      '    },\n' +
-      '    "config": {\n' +
-      '        "preferred-install": "dist",\n' +
-      '        "sort-packages": true\n' +
-      '    },\n' +
-      '    "extra": {\n' +
-      '        "branch-alias": {\n' +
-      '            "dev-master": "1.0-dev"\n' +
-      '        },\n' +
-      '        "prefetcher": {\n' +
-      '            "require": {\n' +
-      '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
-      '            }\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "autoload": {\n' +
-      '        "psr-4": {\n' +
-      '            "Narrowspark\\\\Library\\\\": "src/"\n' +
-      '        },\n' +
-      '        "exclude-from-classmap": [\n' +
-      '            "/tests/"\n' +
-      '        ]\n' +
-      '    },\n' +
-      '    "autoload-dev": {\n' +
-      '        "psr-4": {\n' +
-      '            "Narrowspark\\\\Library\\\\Tests\\\\": "tests/"\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "minimum-stability": "dev",\n' +
-      '    "prefer-stable": true,\n' +
-      '    "scripts": {\n' +
-      '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
-      '        "post-update-cmd": "composer --working-dir=./.build update --lock",\n' +
-      '        "changelog": "composer --working-dir=./.build changelog",\n' +
-      '        "coverage": [\n' +
-      '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
-      '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
-      '        ],\n' +
-      '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
-      '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
-      '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=73 --min-msi=61",\n' +
-      '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
-      '        "phpstan:baseline": "composer --working-dir=./.build phpstan:baseline -- --memory-limit=-1",\n' +
-      '        "psalm": "composer --working-dir=./.build psalm",\n' +
-      '        "psalm:baseline": "composer --working-dir=./.build psalm:baseline",\n' +
-      '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
-      '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
-      '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
-      '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
-      '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
-      '        "req:check": "composer --working-dir=./.build req:check",\n' +
-      '        "test": "phpunit"\n' +
-      '    },\n' +
-      '    "support": {\n' +
-      '        "issues": "https://github.com/narrowspark/php-library-template/issues",\n' +
-      '        "source": "https://github.com/narrowspark/php-library-template"\n' +
-      '    }\n' +
-      '}'
+        '    "name": "narrowspark/php-library-template",\n' +
+        '    "type": "library",\n' +
+        '    "description": "Provides a GitHub repository template for a Narrowspark PHP library, using GitHub actions.",\n' +
+        '    "keywords": [\n' +
+        '        "narrowspark"\n' +
+        '    ],\n' +
+        '    "homepage": "http://github.com/narrowspark/php-library-template",\n' +
+        '    "license": "MIT",\n' +
+        '    "authors": [\n' +
+        '        {\n' +
+        '            "name": "Daniel Bannert",\n' +
+        '            "email": "d.bannert@anolilab.de",\n' +
+        '            "homepage": "http://www.anolilab.de",\n' +
+        '            "role": "Developer"\n' +
+        '        }\n' +
+        '    ],\n' +
+        '    "require": {\n' +
+        '        "php": "^7.4",\n' +
+        '        "thecodingmachine/safe": "^1.1.1"\n' +
+        '    },\n' +
+        '    "require-dev": {\n' +
+        '        "ext-json": "*",\n' +
+        '        "phpunit/phpunit": "^9.1.5",\n' +
+        '        "thecodingmachine/phpstan-safe-rule": "^1.0.0"\n' +
+        '    },\n' +
+        '    "config": {\n' +
+        '        "preferred-install": "dist",\n' +
+        '        "sort-packages": true\n' +
+        '    },\n' +
+        '    "extra": {\n' +
+        '        "branch-alias": {\n' +
+        '            "dev-master": "1.0-dev"\n' +
+        '        },\n' +
+        '        "prefetcher": {\n' +
+        '            "require": {\n' +
+        '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
+        '            }\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "autoload": {\n' +
+        '        "psr-4": {\n' +
+        '            "Narrowspark\\\\Library\\\\": "src/"\n' +
+        '        },\n' +
+        '        "exclude-from-classmap": [\n' +
+        '            "/tests/"\n' +
+        '        ]\n' +
+        '    },\n' +
+        '    "autoload-dev": {\n' +
+        '        "psr-4": {\n' +
+        '            "Narrowspark\\\\Library\\\\Tests\\\\": "tests/"\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "minimum-stability": "dev",\n' +
+        '    "prefer-stable": true,\n' +
+        '    "scripts": {\n' +
+        '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
+        '        "post-update-cmd": "composer --working-dir=./.build update --lock",\n' +
+        '        "changelog": "composer --working-dir=./.build changelog",\n' +
+        '        "coverage": [\n' +
+        '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
+        '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
+        '        ],\n' +
+        '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
+        '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
+        '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=73 --min-msi=61",\n' +
+        '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
+        '        "phpstan:baseline": "composer --working-dir=./.build phpstan:baseline -- --memory-limit=-1",\n' +
+        '        "psalm": "composer --working-dir=./.build psalm",\n' +
+        '        "psalm:baseline": "composer --working-dir=./.build psalm:baseline",\n' +
+        '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
+        '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
+        '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
+        '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
+        '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
+        '        "req:check": "composer --working-dir=./.build req:check",\n' +
+        '        "test": "phpunit"\n' +
+        '    },\n' +
+        '    "support": {\n' +
+        '        "issues": "https://github.com/narrowspark/php-library-template/issues",\n' +
+        '        "source": "https://github.com/narrowspark/php-library-template"\n' +
+        '    }\n' +
+        '}'
     )
     const testFilePathB = createFile(
       path.join(gitHubWorkspace, 'composer.json'),
       '{\n' +
-      '    "name": "testomat/terminal-colour",\n' +
-      '    "type": "library",\n' +
-      '    "description": "Return your terminal message in style! Change the text style, text color and text background color from the terminal, console or shell interface with ANSI color codes.",\n' +
-      '    "keywords": [\n' +
-      '        "narrowspark",\n' +
-      '        "testomat",\n' +
-      '        "color",\n' +
-      '        "terminal",\n' +
-      '        "colour",\n' +
-      '        "ansi",\n' +
-      '        "style",\n' +
-      '        "truecolor",\n' +
-      '        "color256",\n' +
-      '        "color16"\n' +
-      '    ],\n' +
-      '    "homepage": "http://github.com/testomat/terminal-colour",\n' +
-      '    "license": "MIT",\n' +
-      '    "authors": [\n' +
-      '        {\n' +
-      '            "name": "Daniel Bannert",\n' +
-      '            "email": "d.bannert@anolilab.de",\n' +
-      '            "homepage": "http://www.anolilab.de",\n' +
-      '            "role": "Developer"\n' +
-      '        }\n' +
-      '    ],\n' +
-      '    "require": {\n' +
-      '        "php": "^7.3",\n' +
-      '        "thecodingmachine/safe": "^1.1.1"\n' +
-      '    },\n' +
-      '    "require-dev": {\n' +
-      '        "ext-json": "*",\n' +
-      '        "phpunit/phpunit": "^9.1.4"\n' +
-      '    },\n' +
-      '    "config": {\n' +
-      '        "preferred-install": "dist",\n' +
-      '        "sort-packages": true\n' +
-      '    },\n' +
-      '    "extra": {\n' +
-      '        "branch-alias": {\n' +
-      '            "dev-master": "1.1-dev"\n' +
-      '        },\n' +
-      '        "prefetcher": {\n' +
-      '            "require": {\n' +
-      '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
-      '            }\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "autoload": {\n' +
-      '        "psr-4": {\n' +
-      '            "Testomat\\\\TerminalColour\\\\": "src/"\n' +
-      '        },\n' +
-      '        "exclude-from-classmap": [\n' +
-      '            "/tests/"\n' +
-      '        ]\n' +
-      '    },\n' +
-      '    "autoload-dev": {\n' +
-      '        "psr-4": {\n' +
-      '            "Testomat\\\\TerminalColour\\\\Tests\\\\": "tests/"\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "minimum-stability": "dev",\n' +
-      '    "prefer-stable": true,\n' +
-      '    "scripts": {\n' +
-      '        "changelog": "composer --working-dir=./.build changelog",\n' +
-      '        "coverage": [\n' +
-      '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
-      '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
-      '        ],\n' +
-      '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
-      '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
-      '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
-      '        "psalm": "composer --working-dir=./.build psalm",\n' +
-      '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
-      '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=89 --min-msi=89",\n' +
-      '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
-      '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
-      '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
-      '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
-      '        "test": "phpunit",\n' +
-      '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
-      '        "post-update-cmd": "composer --working-dir=./.build update --lock"\n' +
-      '    },\n' +
-      '    "support": {\n' +
-      '        "issues": "https://github.com/testomat/terminal-colour/issues",\n' +
-      '        "source": "https://github.com/testomat/terminal-colour"\n' +
-      '    }\n' +
-      '}'
+        '    "name": "testomat/terminal-colour",\n' +
+        '    "type": "library",\n' +
+        '    "description": "Return your terminal message in style! Change the text style, text color and text background color from the terminal, console or shell interface with ANSI color codes.",\n' +
+        '    "keywords": [\n' +
+        '        "narrowspark",\n' +
+        '        "testomat",\n' +
+        '        "color",\n' +
+        '        "terminal",\n' +
+        '        "colour",\n' +
+        '        "ansi",\n' +
+        '        "style",\n' +
+        '        "truecolor",\n' +
+        '        "color256",\n' +
+        '        "color16"\n' +
+        '    ],\n' +
+        '    "homepage": "http://github.com/testomat/terminal-colour",\n' +
+        '    "license": "MIT",\n' +
+        '    "authors": [\n' +
+        '        {\n' +
+        '            "name": "Daniel Bannert",\n' +
+        '            "email": "d.bannert@anolilab.de",\n' +
+        '            "homepage": "http://www.anolilab.de",\n' +
+        '            "role": "Developer"\n' +
+        '        }\n' +
+        '    ],\n' +
+        '    "require": {\n' +
+        '        "php": "^7.3",\n' +
+        '        "thecodingmachine/safe": "^1.1.1"\n' +
+        '    },\n' +
+        '    "require-dev": {\n' +
+        '        "ext-json": "*",\n' +
+        '        "phpunit/phpunit": "^9.1.4"\n' +
+        '    },\n' +
+        '    "config": {\n' +
+        '        "preferred-install": "dist",\n' +
+        '        "sort-packages": true\n' +
+        '    },\n' +
+        '    "extra": {\n' +
+        '        "branch-alias": {\n' +
+        '            "dev-master": "1.1-dev"\n' +
+        '        },\n' +
+        '        "prefetcher": {\n' +
+        '            "require": {\n' +
+        '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
+        '            }\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "autoload": {\n' +
+        '        "psr-4": {\n' +
+        '            "Testomat\\\\TerminalColour\\\\": "src/"\n' +
+        '        },\n' +
+        '        "exclude-from-classmap": [\n' +
+        '            "/tests/"\n' +
+        '        ]\n' +
+        '    },\n' +
+        '    "autoload-dev": {\n' +
+        '        "psr-4": {\n' +
+        '            "Testomat\\\\TerminalColour\\\\Tests\\\\": "tests/"\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "minimum-stability": "dev",\n' +
+        '    "prefer-stable": true,\n' +
+        '    "scripts": {\n' +
+        '        "changelog": "composer --working-dir=./.build changelog",\n' +
+        '        "coverage": [\n' +
+        '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
+        '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
+        '        ],\n' +
+        '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
+        '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
+        '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
+        '        "psalm": "composer --working-dir=./.build psalm",\n' +
+        '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
+        '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=89 --min-msi=89",\n' +
+        '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
+        '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
+        '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
+        '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
+        '        "test": "phpunit",\n' +
+        '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
+        '        "post-update-cmd": "composer --working-dir=./.build update --lock"\n' +
+        '    },\n' +
+        '    "support": {\n' +
+        '        "issues": "https://github.com/testomat/terminal-colour/issues",\n' +
+        '        "source": "https://github.com/testomat/terminal-colour"\n' +
+        '    }\n' +
+        '}'
     )
 
     settings = new Settings(context)
@@ -532,97 +532,97 @@ describe('sync tests', () => {
 
     expect(await fs.readFile(testFilePathB, 'utf8')).toBe(
       '{\n' +
-      '    "name": "testomat/terminal-colour",\n' +
-      '    "type": "library",\n' +
-      '    "description": "Return your terminal message in style! Change the text style, text color and text background color from the terminal, console or shell interface with ANSI color codes.",\n' +
-      '    "keywords": [\n' +
-      '        "narrowspark",\n' +
-      '        "testomat",\n' +
-      '        "color",\n' +
-      '        "terminal",\n' +
-      '        "colour",\n' +
-      '        "ansi",\n' +
-      '        "style",\n' +
-      '        "truecolor",\n' +
-      '        "color256",\n' +
-      '        "color16"\n' +
-      '    ],\n' +
-      '    "homepage": "http://github.com/testomat/terminal-colour",\n' +
-      '    "license": "MIT",\n' +
-      '    "authors": [\n' +
-      '        {\n' +
-      '            "name": "Daniel Bannert",\n' +
-      '            "email": "d.bannert@anolilab.de",\n' +
-      '            "homepage": "http://www.anolilab.de",\n' +
-      '            "role": "Developer"\n' +
-      '        }\n' +
-      '    ],\n' +
-      '    "require": {\n' +
-      '        "php": "^7.3",\n' +
-      '        "thecodingmachine/safe": "^1.1.1"\n' +
-      '    },\n' +
-      '    "require-dev": {\n' +
-      '        "ext-json": "*",\n' +
-      '        "phpunit/phpunit": "^9.1.5",\n' +
-      '        "thecodingmachine/phpstan-safe-rule": "^1.0.0"\n' +
-      '    },\n' +
-      '    "config": {\n' +
-      '        "preferred-install": "dist",\n' +
-      '        "sort-packages": true\n' +
-      '    },\n' +
-      '    "extra": {\n' +
-      '        "branch-alias": {\n' +
-      '            "dev-master": "1.1-dev"\n' +
-      '        },\n' +
-      '        "prefetcher": {\n' +
-      '            "require": {\n' +
-      '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
-      '            }\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "autoload": {\n' +
-      '        "psr-4": {\n' +
-      '            "Testomat\\\\TerminalColour\\\\": "src/"\n' +
-      '        },\n' +
-      '        "exclude-from-classmap": [\n' +
-      '            "/tests/"\n' +
-      '        ]\n' +
-      '    },\n' +
-      '    "autoload-dev": {\n' +
-      '        "psr-4": {\n' +
-      '            "Testomat\\\\TerminalColour\\\\Tests\\\\": "tests/"\n' +
-      '        }\n' +
-      '    },\n' +
-      '    "minimum-stability": "dev",\n' +
-      '    "prefer-stable": true,\n' +
-      '    "scripts": {\n' +
-      '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
-      '        "post-update-cmd": "composer --working-dir=./.build update --lock",\n' +
-      '        "changelog": "composer --working-dir=./.build changelog",\n' +
-      '        "coverage": [\n' +
-      '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
-      '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
-      '        ],\n' +
-      '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
-      '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
-      '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=73 --min-msi=61",\n' +
-      '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
-      '        "phpstan:baseline": "composer --working-dir=./.build phpstan:baseline -- --memory-limit=-1",\n' +
-      '        "psalm": "composer --working-dir=./.build psalm",\n' +
-      '        "psalm:baseline": "composer --working-dir=./.build psalm:baseline",\n' +
-      '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
-      '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
-      '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
-      '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
-      '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
-      '        "req:check": "composer --working-dir=./.build req:check",\n' +
-      '        "test": "phpunit"\n' +
-      '    },\n' +
-      '    "support": {\n' +
-      '        "issues": "https://github.com/testomat/terminal-colour/issues",\n' +
-      '        "source": "https://github.com/testomat/terminal-colour"\n' +
-      '    }\n' +
-      '}'
+        '    "name": "testomat/terminal-colour",\n' +
+        '    "type": "library",\n' +
+        '    "description": "Return your terminal message in style! Change the text style, text color and text background color from the terminal, console or shell interface with ANSI color codes.",\n' +
+        '    "keywords": [\n' +
+        '        "narrowspark",\n' +
+        '        "testomat",\n' +
+        '        "color",\n' +
+        '        "terminal",\n' +
+        '        "colour",\n' +
+        '        "ansi",\n' +
+        '        "style",\n' +
+        '        "truecolor",\n' +
+        '        "color256",\n' +
+        '        "color16"\n' +
+        '    ],\n' +
+        '    "homepage": "http://github.com/testomat/terminal-colour",\n' +
+        '    "license": "MIT",\n' +
+        '    "authors": [\n' +
+        '        {\n' +
+        '            "name": "Daniel Bannert",\n' +
+        '            "email": "d.bannert@anolilab.de",\n' +
+        '            "homepage": "http://www.anolilab.de",\n' +
+        '            "role": "Developer"\n' +
+        '        }\n' +
+        '    ],\n' +
+        '    "require": {\n' +
+        '        "php": "^7.3",\n' +
+        '        "thecodingmachine/safe": "^1.1.1"\n' +
+        '    },\n' +
+        '    "require-dev": {\n' +
+        '        "ext-json": "*",\n' +
+        '        "phpunit/phpunit": "^9.1.5",\n' +
+        '        "thecodingmachine/phpstan-safe-rule": "^1.0.0"\n' +
+        '    },\n' +
+        '    "config": {\n' +
+        '        "preferred-install": "dist",\n' +
+        '        "sort-packages": true\n' +
+        '    },\n' +
+        '    "extra": {\n' +
+        '        "branch-alias": {\n' +
+        '            "dev-master": "1.1-dev"\n' +
+        '        },\n' +
+        '        "prefetcher": {\n' +
+        '            "require": {\n' +
+        '                "phpunit/phpunit": "^8.0 || ^9.0"\n' +
+        '            }\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "autoload": {\n' +
+        '        "psr-4": {\n' +
+        '            "Testomat\\\\TerminalColour\\\\": "src/"\n' +
+        '        },\n' +
+        '        "exclude-from-classmap": [\n' +
+        '            "/tests/"\n' +
+        '        ]\n' +
+        '    },\n' +
+        '    "autoload-dev": {\n' +
+        '        "psr-4": {\n' +
+        '            "Testomat\\\\TerminalColour\\\\Tests\\\\": "tests/"\n' +
+        '        }\n' +
+        '    },\n' +
+        '    "minimum-stability": "dev",\n' +
+        '    "prefer-stable": true,\n' +
+        '    "scripts": {\n' +
+        '        "post-install-cmd": "composer --working-dir=./.build install --lock",\n' +
+        '        "post-update-cmd": "composer --working-dir=./.build update --lock",\n' +
+        '        "changelog": "composer --working-dir=./.build changelog",\n' +
+        '        "coverage": [\n' +
+        '            "phpunit --dump-xdebug-filter=./.build/phpunit/.xdebug-filter.php",\n' +
+        '            "phpunit --prepend=./.build/phpunit/.xdebug-filter.php --coverage-html=./.build/phpunit/coverage"\n' +
+        '        ],\n' +
+        '        "cs": "composer --working-dir=./.build cs -- -v",\n' +
+        '        "cs:check": "composer --working-dir=./.build cs:check -- -v",\n' +
+        '        "infection": "composer --working-dir=./.build infection -- --min-covered-msi=73 --min-msi=61",\n' +
+        '        "phpstan": "composer --working-dir=./.build phpstan -- --memory-limit=-1",\n' +
+        '        "phpstan:baseline": "composer --working-dir=./.build phpstan:baseline -- --memory-limit=-1",\n' +
+        '        "psalm": "composer --working-dir=./.build psalm",\n' +
+        '        "psalm:baseline": "composer --working-dir=./.build psalm:baseline",\n' +
+        '        "psalm:fix": "composer --working-dir=./.build psalm:fix",\n' +
+        '        "rector-src": "composer --working-dir=./.build rector-src",\n' +
+        '        "rector-src:fix": "composer --working-dir=./.build rector-src:fix",\n' +
+        '        "rector-tests": "composer --working-dir=./.build rector-tests",\n' +
+        '        "rector-tests:fix": "composer --working-dir=./.build rector-tests:fix",\n' +
+        '        "req:check": "composer --working-dir=./.build req:check",\n' +
+        '        "test": "phpunit"\n' +
+        '    },\n' +
+        '    "support": {\n' +
+        '        "issues": "https://github.com/testomat/terminal-colour/issues",\n' +
+        '        "source": "https://github.com/testomat/terminal-colour"\n' +
+        '    }\n' +
+        '}'
     )
   })
 })
