@@ -1,4 +1,4 @@
-import path from 'path'
+import path from "path"
 import * as core from '@actions/core'
 import {GithubActionContext} from '../lib/github-action-context'
 import fs from 'fs-extra'
