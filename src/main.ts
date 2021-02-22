@@ -126,23 +126,23 @@ async function run(): Promise<void> {
                 await mainGitCommandManager.tryConfigUnset(USER_NAME, true);
             }
 
-      core.startGroup('Creating Pull request')
-      await githubManager.pulls.create(
-        settings.repositoryOwner,
-        settings.repositoryName,
-        settings.syncBranchName,
-        settings.ref,
-        settings.messageHead,
-        settings.messageBody
-      )
-      core.endGroup()
-    } finally {
-      // Unregister problem matcher
-      coreCommand.issueCommand('remove-matcher', {owner: 'checkout-git'}, '')
+            core.startGroup("Creating Pull request");
+            await githubManager.pulls.create(
+                settings.repositoryOwner,
+                settings.repositoryName,
+                settings.syncBranchName,
+                settings.ref,
+                settings.messageHead,
+                settings.messageBody,
+            );
+            core.endGroup();
+        } finally {
+            // Unregister problem matcher
+            coreCommand.issueCommand("remove-matcher", { owner: "checkout-git" }, "");
+        }
+    } catch (error) {
+        core.setFailed(error.message);
     }
-  } catch (error) {
-    core.setFailed(error.message)
-  }
 }
 
 async function prepareTemplateSettings(settings: ISettings, githubManager: GithubManager): Promise<ISettings> {

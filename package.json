@@ -23,8 +23,6 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
     "lint": "yarn run lint:eslint && yarn run lint:text",
     "lint:eslint": "eslint ./src/**/*.ts",
     "lint:eslint:fix": "eslint --fix ./src/**/*.ts",
@@ -33,7 +31,7 @@
     "lint:text:fix": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --fix",
     "pack": "ncc build",
     "test": "jest",
-    "all": "yarn run format && yarn run lint && yarn run build && yarn run pack && yarn test && node lib/misc/generate-docs.js"
+    "all": "yarn run lint && yarn run build && yarn run pack && yarn test && node lib/misc/generate-docs.js"
   },
   "commitlint": {
     "extends": [
