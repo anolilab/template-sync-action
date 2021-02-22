@@ -1,0 +1,16 @@
+# This action will automatically close issues fixed in
+# pull requests that doesn't target the default branch.
+
+name: Auto Close Fixed Issues
+on:
+    pull_request_target:
+        types: [closed]
+jobs:
+    run:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: bubkoo/auto-close-fixed-issues@v1
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  comment: |
+                      This issue was closed by #{{ pr }}.
