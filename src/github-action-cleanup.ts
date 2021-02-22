@@ -28,7 +28,7 @@ export async function cleanup(repositoryPath: string): Promise<void> {
         await authHelper.removeAuth();
 
         await io.rmRF(repositoryPath);
-    } catch (error: Error) {
+    } catch (error) {
         core.setFailed(error.message);
     }
 }
