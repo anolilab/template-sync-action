@@ -1,3 +1,23 @@
+## [1.0.0-alpha.8](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2021-02-22)
+
+
+### Features
+
+* added commitlint ([bb6d375](https://github.com/narrowspark/template-sync-action/commit/bb6d3754507cbb071663c74b52f6d9fa27f8ca1c))
+* added semantic release workflow ([7a40fdf](https://github.com/narrowspark/template-sync-action/commit/7a40fdfaf83bca2130b1390932001607c6b1356e))
+* added text lint ([1de1408](https://github.com/narrowspark/template-sync-action/commit/1de14083b075898d1581778297ef171a1011ab79))
+* merge master (main) into alpha ([ea6eed2](https://github.com/narrowspark/template-sync-action/commit/ea6eed254bfd9393e92fd88bd02277162912fa37))
+* update the dependabot config ([2f438ce](https://github.com/narrowspark/template-sync-action/commit/2f438ceea41759f824122399cc3696a3da7ff5ed))
+* upgraded dependencies ([2ea0d3a](https://github.com/narrowspark/template-sync-action/commit/2ea0d3a0728003537de4b15c2c9ebadc2c4675b4))
+
+
+### Bug Fixes
+
+* changed node version back to 12 ([5ce2fc9](https://github.com/narrowspark/template-sync-action/commit/5ce2fc97c87d7dc0e312843d66f50ee38d271cdf))
+* fixed error handling in github-manager.ts ([1b790ac](https://github.com/narrowspark/template-sync-action/commit/1b790ac37b7c93216fd88c54a3d54344ec73dd26))
+* fixed test pipe ([87f5b05](https://github.com/narrowspark/template-sync-action/commit/87f5b05a45e630416f115f3af8dc986033e86072))
+* fixed wrong type ([90f34c7](https://github.com/narrowspark/template-sync-action/commit/90f34c77a6707467c14c1bc0d949ce4173522423))
+
 ## [1.0.0-alpha.7](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2020-05-14)
 
 
