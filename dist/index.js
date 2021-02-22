@@ -3705,7 +3705,7 @@ var FileHound = function (_EventEmitter) {
     }
 
     /**
-     * Include file stats 
+     * Include file stats
      *
      * @memberOf FileHound
      * @instance
@@ -13486,7 +13486,7 @@ var File = function () {
      * file.with(() => {
      *   if (file.isFileSync()) {
      *     file.delete();
-     *   } 
+     *   }
      * });
      */
 
@@ -52852,28 +52852,28 @@ __webpack_require__(780)(Promise, apiRejection, tryConvertToPromise, createConte
 __webpack_require__(658)(Promise);
 __webpack_require__(685)(Promise, INTERNAL);
 __webpack_require__(610)(Promise, INTERNAL);
-                                                         
-    util.toFastProperties(Promise);                                          
-    util.toFastProperties(Promise.prototype);                                
-    function fillTypes(value) {                                              
-        var p = new Promise(INTERNAL);                                       
-        p._fulfillmentHandler0 = value;                                      
-        p._rejectionHandler0 = value;                                        
-        p._promise0 = value;                                                 
-        p._receiver0 = value;                                                
-    }                                                                        
-    // Complete slack tracking, opt out of field-type tracking and           
-    // stabilize map                                                         
-    fillTypes({a: 1});                                                       
-    fillTypes({b: 2});                                                       
-    fillTypes({c: 3});                                                       
-    fillTypes(1);                                                            
-    fillTypes(function(){});                                                 
-    fillTypes(undefined);                                                    
-    fillTypes(false);                                                        
-    fillTypes(new Promise(INTERNAL));                                        
-    debug.setBounds(Async.firstLineError, util.lastLineError);               
-    return Promise;                                                          
+
+    util.toFastProperties(Promise);
+    util.toFastProperties(Promise.prototype);
+    function fillTypes(value) {
+        var p = new Promise(INTERNAL);
+        p._fulfillmentHandler0 = value;
+        p._rejectionHandler0 = value;
+        p._promise0 = value;
+        p._receiver0 = value;
+    }
+    // Complete slack tracking, opt out of field-type tracking and
+    // stabilize map
+    fillTypes({a: 1});
+    fillTypes({b: 2});
+    fillTypes({c: 3});
+    fillTypes(1);
+    fillTypes(function(){});
+    fillTypes(undefined);
+    fillTypes(false);
+    fillTypes(new Promise(INTERNAL));
+    debug.setBounds(Async.firstLineError, util.lastLineError);
+    return Promise;
 
 };
 
@@ -53084,7 +53084,7 @@ RetryOperation.prototype.mainError = function() {
 /******/ ],
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ 	"use strict";
-/******/ 
+/******/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	!function() {
 /******/ 		__webpack_require__.nmd = function(module) {
@@ -53101,6 +53101,6 @@ RetryOperation.prototype.mainError = function() {
 /******/ 			return module;
 /******/ 		};
 /******/ 	}();
-/******/ 	
+/******/
 /******/ }
 );
