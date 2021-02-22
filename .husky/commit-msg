@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# The hook should exit with non-zero status after issuing
+# an appropriate message if it wants to stop the commit.
+#
+# https://rushjs.io/pages/maintainer/git_hooks/
+
+echo --------------------------------------------
+echo Starting Git hook: commit-msg
+
+yarn commitlint --edit $1 || exit $?
+
+echo Finished Git hook: commit-msg
+echo --------------------------------------------
