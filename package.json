@@ -3,21 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "description": "Keep your github template fork up to date.",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint --fix src/**/*.ts",
-    "pack": "ncc build",
-    "test": "jest",
-    "all": "npm run format && npm run lint && npm run build && npm run pack && npm test && node lib/misc/generate-docs.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/narrowspark/template-sync-action.git"
-  },
   "keywords": [
     "actions",
     "node",
@@ -28,46 +13,81 @@
     "github-template",
     "github-templates"
   ],
-  "author": "prisis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/narrowspark/template-sync-action.git"
+  },
   "license": "MIT",
+  "author": "prisis",
+  "main": "lib/main.js",
+  "scripts": {
+    "postinstall": "husky install",
+    "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "yarn run lint:eslint && yarn run lint:text",
+    "lint:eslint": "eslint ./src/**/*.ts",
+    "lint:eslint:fix": "eslint --fix ./src/**/*.ts",
+    "lint:staged": "lint-staged",
+    "lint:text": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --dry-run",
+    "lint:text:fix": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --fix",
+    "pack": "ncc build",
+    "test": "jest",
+    "all": "yarn run format && yarn run lint && yarn run build && yarn run pack && yarn test && node lib/misc/generate-docs.js"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.5.5",
-    "@octokit/action": "^2.9.0",
-    "@octokit/plugin-retry": "^3.0.2",
+    "@actions/tool-cache": "^1.6.1",
+    "@octokit/action": "^3.4.0",
+    "@octokit/plugin-retry": "^3.0.7",
     "filehound": "^1.17.4",
-    "fs-extra": "^9.0.1",
-    "uuid": "^8.1.0"
+    "fs-extra": "^9.1.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@octokit/fixtures": "^21.0.5",
-    "@octokit/types": "^4.1.9",
-    "@types/bluebird": "^3.5.31",
-    "@types/fs-extra": "^9.0.1",
-    "@types/jest": "^26.0.16",
-    "@types/js-yaml": "^3.12.4",
-    "@types/node": "^14.0.7",
+    "@anolilab/eslint-config": "^1.1.3",
+    "@anolilab/textlint-config": "^1.0.1",
+    "@anolilab/prettier-config": "^1.0.0",
+    "@octokit/fixtures": "^21.3.5",
+    "@octokit/types": "^6.10.0",
+    "@types/bluebird": "^3.5.33",
+    "@types/fs-extra": "^9.0.7",
+    "@types/jest": "^26.0.20",
+    "@types/js-yaml": "^4.0.0",
+    "@types/node": "12.12.70",
     "@types/promise-retry": "^1.1.3",
-    "@types/uuid": "^7.0.3",
-    "@typescript-eslint/parser": "^3.1.0",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
     "@zeit/ncc": "^0.22.3",
-    "eslint": "^6.8.0",
-    "eslint-plugin-github": "^4.0.1",
-    "eslint-plugin-jest": "^23.13.2",
-    "husky": "^4.2.5",
-    "jest": "^25.5.4",
-    "jest-circus": "^26.0.1",
-    "js-yaml": "^3.14.0",
-    "prettier": "^2.0.5",
-    "ts-jest": "^25.5.1",
-    "typescript": "^3.9.5"
+    "eslint": "^7.20.0",
+    "eslint-plugin-jest": "^24.1.5",
+    "husky": "^5.0.9",
+    "jest": "^26.6.3",
+    "jest-circus": "^26.6.3",
+    "js-yaml": "^4.0.0",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.1.5"
   },
-  "husky": {
-    "skipCI": true,
-    "hooks": {
-      "pre-commit": "npm run all"
-    }
+  "engines": {
+    "node": ">=12"
   }
 }
