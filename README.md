@@ -5,7 +5,7 @@
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
 
-This [github action](https://github.com/features/actions) gives you the possibility to sync your repository with a [github template repository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
+This [github action](https://github.com/features/actions) gives you the possibility to sync your repository with a [github template repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 
 
 ## Example Workflow
