@@ -3,8 +3,8 @@ import { IWebhookPayload } from "./interfaces";
 import { EOL } from "os";
 
 export class GithubActionContext {
-    payload: IWebhookPayload;
-    ref: string;
+    private payload: IWebhookPayload;
+    public ref: string;
 
     constructor() {
         this.payload = {};

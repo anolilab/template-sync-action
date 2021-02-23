@@ -10,9 +10,4 @@ module.exports = {
   roots: ['<rootDir>/__tests__'],
   verbose: true,
   collectCoverage: true,
-  globals: {
-    'ts-jest': {
-      packageJson: 'package.json',
-    },
-  },
 }

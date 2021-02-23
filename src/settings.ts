@@ -57,7 +57,8 @@ export class Settings implements ISettings {
                 "LICENSE.md",
                 "README.md",
                 "UPGRADE.md",
-            ].concat(core.getInput("ignore_list", { required: false }) || []),
+            ].concat(ignoreList),
+            filters,
             clean: (core.getInput("clean") || "true").toUpperCase() === "TRUE",
         };
     }
