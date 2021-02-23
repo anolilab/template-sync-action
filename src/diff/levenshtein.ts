@@ -18,8 +18,8 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
-import {Diff} from './diff'
-import {DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT} from '../interfaces'
+import { Diff } from "./diff";
+import { DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT } from "../interfaces";
 
 /**
  * Compute the Levenshtein distance; the number of inserted, deleted or
@@ -32,31 +32,31 @@ import {DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT} from '../interfaces'
  * @return {number} Number of changes.
  */
 export const levenshtein = (diffs: Diff[]): number => {
-  let levenshtein = 0
-  let insertions = 0
-  let deletions = 0
+    let levenshtein = 0;
+    let insertions = 0;
+    let deletions = 0;
 
-  for (let x = 0; x < diffs.length; x++) {
-    const op = diffs[x].operation
-    const data = diffs[x].text
+    for (let x = 0; x < diffs.length; x++) {
+        const op = diffs[x].operation;
+        const data = diffs[x].text;
 
-    switch (op) {
-      case DIFF_INSERT:
-        insertions += data.length
-        break
-      case DIFF_DELETE:
-        deletions += data.length
-        break
-      case DIFF_EQUAL:
-        // A deletion and an insertion is one substitution.
-        levenshtein += Math.max(insertions, deletions)
-        insertions = 0
-        deletions = 0
-        break
+        switch (op) {
+            case DIFF_INSERT:
+                insertions += data.length;
+                break;
+            case DIFF_DELETE:
+                deletions += data.length;
+                break;
+            case DIFF_EQUAL:
+                // A deletion and an insertion is one substitution.
+                levenshtein += Math.max(insertions, deletions);
+                insertions = 0;
+                deletions = 0;
+                break;
+        }
     }
-  }
 
-  levenshtein += Math.max(insertions, deletions)
+    levenshtein += Math.max(insertions, deletions);
 
-  return levenshtein
-}
+    return levenshtein;
+};

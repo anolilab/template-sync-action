@@ -18,8 +18,8 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
-import {Diff} from './diff'
-import {DIFF_DELETE, DIFF_INSERT} from '../interfaces'
+import { Diff } from "./diff";
+import { DIFF_DELETE, DIFF_INSERT } from "../interfaces";
 
 /**
  * loc is a location in text1, compute and return the equivalent location in
@@ -32,37 +32,37 @@ import {DIFF_DELETE, DIFF_INSERT} from '../interfaces'
  * @return {number} Location within text2.
  */
 export const diffXIndex = (diffs: Diff[], loc: number): number => {
-  let chars1 = 0
-  let chars2 = 0
-  let lastChars1 = 0
-  let lastChars2 = 0
-  let x
+    let chars1 = 0;
+    let chars2 = 0;
+    let lastChars1 = 0;
+    let lastChars2 = 0;
+    let x;
 
-  for (x = 0; x < diffs.length; x++) {
-    if (diffs[x].operation !== DIFF_INSERT) {
-      // Equality or deletion.
-      chars1 += diffs[x].text.length
+    for (x = 0; x < diffs.length; x++) {
+        if (diffs[x].operation !== DIFF_INSERT) {
+            // Equality or deletion.
+            chars1 += diffs[x].text.length;
+        }
+
+        if (diffs[x].operation !== DIFF_DELETE) {
+            // Equality or insertion.
+            chars2 += diffs[x].text.length;
+        }
+
+        if (chars1 > loc) {
+            // Overshot the location.
+            break;
+        }
+
+        lastChars1 = chars1;
+        lastChars2 = chars2;
     }
 
-    if (diffs[x].operation !== DIFF_DELETE) {
-      // Equality or insertion.
-      chars2 += diffs[x].text.length
+    // Was the location was deleted?
+    if (diffs.length != x && diffs[x].operation === DIFF_DELETE) {
+        return lastChars2;
     }
 
-    if (chars1 > loc) {
-      // Overshot the location.
-      break
-    }
-
-    lastChars1 = chars1
-    lastChars2 = chars2
-  }
-
-  // Was the location was deleted?
-  if (diffs.length != x && diffs[x].operation === DIFF_DELETE) {
-    return lastChars2
-  }
-
-  // Add the remaining character length.
-  return lastChars2 + (loc - lastChars1)
-}
+    // Add the remaining character length.
+    return lastChars2 + (loc - lastChars1);
+};

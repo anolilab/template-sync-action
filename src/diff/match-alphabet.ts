@@ -25,16 +25,16 @@
  *
  * @return {!Object} Hash of character locations.
  */
-export const matchAlphabet = (pattern: string): {[key: string]: number} => {
-  const s: {[key: string]: number} = {}
+export const matchAlphabet = (pattern: string): { [key: string]: number } => {
+    const s: { [key: string]: number } = {};
 
-  for (let i = 0; i < pattern.length; i++) {
-    s[pattern.charAt(i)] = 0
-  }
+    for (let i = 0; i < pattern.length; i++) {
+        s[pattern.charAt(i)] = 0;
+    }
 
-  for (let i = 0; i < pattern.length; i++) {
-    s[pattern.charAt(i)] |= 1 << (pattern.length - i - 1)
-  }
+    for (let i = 0; i < pattern.length; i++) {
+        s[pattern.charAt(i)] |= 1 << (pattern.length - i - 1);
+    }
 
-  return s
-}
+    return s;
+};

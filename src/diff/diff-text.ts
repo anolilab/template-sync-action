@@ -18,7 +18,7 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
-import {Diff} from './diff'
+import { Diff } from "./diff";
 
 /**
  * Compute and return the source text (all equalities and deletions).
@@ -28,13 +28,13 @@ import {Diff} from './diff'
  * @return {string} Source text.
  */
 export const diffText = (diffs: Diff[], type: number): string => {
-  const text: string[] = []
+    const text: string[] = [];
 
-  for (let x = 0; x < diffs.length; x++) {
-    if (diffs[x].operation !== type) {
-      text[x] = diffs[x].text
+    for (let x = 0; x < diffs.length; x++) {
+        if (diffs[x].operation !== type) {
+            text[x] = diffs[x].text;
+        }
     }
-  }
 
-  return text.join('')
-}
+    return text.join("");
+};

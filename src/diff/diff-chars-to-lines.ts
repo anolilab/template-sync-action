@@ -18,7 +18,7 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
-import {Diff} from './diff'
+import { Diff } from "./diff";
 
 /**
  * Rehydrate the text in a diff from a string of line hashes to real lines of
@@ -28,14 +28,14 @@ import {Diff} from './diff'
  * @param {!Array.<string>} lineArray Array of unique strings.
  */
 export const diffCharsToLines = (diffs: Diff[], lineArray: string[]) => {
-  for (let i = 0; i < diffs.length; i++) {
-    const chars = diffs[i].text
-    const text: string[] = []
+    for (let i = 0; i < diffs.length; i++) {
+        const chars = diffs[i].text;
+        const text: string[] = [];
 
-    for (let j = 0; j < chars.length; j++) {
-      text[j] = lineArray[chars.charCodeAt(j)]
+        for (let j = 0; j < chars.length; j++) {
+            text[j] = lineArray[chars.charCodeAt(j)];
+        }
+
+        diffs[i].text = text.join("");
     }
-
-    diffs[i].text = text.join('')
-  }
-}
+};

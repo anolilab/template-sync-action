@@ -1,11 +1,11 @@
-import * as core from '@actions/core'
-import {URL} from 'url'
-import path from 'path'
-import YAML from 'yaml'
-import fs from 'fs-extra'
-import {GithubActionContext} from './github-action-context'
-import {Filter, ISettings, IYamlSettings} from './interfaces'
-import {inspect} from 'util'
+import * as core from "@actions/core";
+import { URL } from "url";
+import path from "path";
+import YAML from "yaml";
+import fs from "fs-extra";
+import { GithubActionContext } from "./github-action-context";
+import { Filter, ISettings, IYamlSettings } from "./interfaces";
+import { inspect } from "util";
 
 export class Settings implements ISettings {
     settings: ISettings;
@@ -14,11 +14,11 @@ export class Settings implements ISettings {
         const message =
             "This pull request has been created by the [template sync action](https://github.com/narrowspark/template-sync-action) action.\n\nThis PR synchronizes with {0}\n\n---\n\n You can set a custom pull request title, body, ref and commit messages, see [Usage](https://github.com/narrowspark/template-sync-action#Usage).";
 
-    let githubWorkspacePath = Settings.getGithubWorkspacePath()
+        let githubWorkspacePath = Settings.getGithubWorkspacePath();
 
-    let {ignoreList, filters} = Settings.loadYamlSettings(
-      path.join(githubWorkspacePath, '.github', 'template-sync-settings.yml')
-    )
+        let { ignoreList, filters } = Settings.loadYamlSettings(
+            path.join(githubWorkspacePath, ".github", "template-sync-settings.yml"),
+        );
 
         this.settings = {
             authToken: core.getInput("github_token", { required: true }),
@@ -33,15 +33,15 @@ export class Settings implements ISettings {
             authorName: core.getInput("git_author_name", { required: true }),
             authorEmail: core.getInput("git_author_email", { required: true }),
 
-      repositoryOwner: core.getInput('owner') || context.repo.owner,
-      repositoryName: core.getInput('repo') || context.repo.repo,
-      githubWorkspacePath,
+            repositoryOwner: core.getInput("owner") || context.repo.owner,
+            repositoryName: core.getInput("repo") || context.repo.repo,
+            githubWorkspacePath,
 
             messageHead: core.getInput("pr_title") || 'Enhancement: Synchronize with "{0}"',
             messageBody: core.getInput("pr_message") || message,
 
-      ref: core.getInput('ref') || context.ref,
-      syncBranchName: 'feature/template/sync/{0}',
+            ref: core.getInput("ref") || context.ref,
+            syncBranchName: "feature/template/sync/{0}",
 
             templateRepositoryRef: core.getInput("template_ref") || "refs/heads/master",
             templateRepository: "",
@@ -61,73 +61,63 @@ export class Settings implements ISettings {
             clean: (core.getInput("clean") || "true").toUpperCase() === "TRUE",
         };
     }
-  }
 
-  public static getGithubWorkspacePath(): string {
-    let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
+    public static getGithubWorkspacePath(): string {
+        let githubWorkspacePath = process.env["GITHUB_WORKSPACE"];
 
-    if (!githubWorkspacePath) {
-      throw new Error('GITHUB_WORKSPACE not defined')
-    }
-
-    githubWorkspacePath = path.resolve(githubWorkspacePath)
-
-    core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`)
-
-    return githubWorkspacePath
-  }
-
-  public static loadYamlSettings(
-    dotGithubPath: string
-  ): {filters: Filter[]; ignoreList: string[]} {
-    let ignoreList: string[] = []
-    const filters: Filter[] = []
-
-    try {
-      const stats = fs.lstatSync(dotGithubPath)
-
-      if (stats.isFile()) {
-        const yamlSettings: IYamlSettings = YAML.parse(
-          fs.readFileSync(dotGithubPath, 'utf8')
-        )
-        const yamlFilters = yamlSettings.filters || []
-
-        yamlFilters.forEach(filter => {
-          if (typeof filter === 'object' && filter !== null) {
-            if (
-              typeof filter.filepath !== 'undefined' &&
-              typeof filter.filter !== 'undefined'
-            ) {
-              filters.push({
-                filePath: filter.filepath,
-                filter: filter.filter,
-                strict: Boolean(filter.strict || false),
-                count: 0,
-                maxCount: filter.count || 1
-              } as Filter)
-            } else {
-              core.info(
-                `Please provide the correct syntax for ${inspect(
-                  filter
-                )}; Check the readme of https://github.com/narrowspark/template-sync-action.`
-              )
-            }
-          }
-        })
-
-        return {
-          ignoreList: (yamlSettings.ignore_list as string[]) || [],
-          filters
+        if (!githubWorkspacePath) {
+            throw new Error("GITHUB_WORKSPACE not defined");
         }
-      }
-    } catch (e) {
-      core.info(
-        `No settings file found under ${dotGithubPath}, continue without it...`
-      )
+
+        githubWorkspacePath = path.resolve(githubWorkspacePath);
+
+        core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`);
+
+        return githubWorkspacePath;
     }
 
-    return {ignoreList, filters}
-  }
+    public static loadYamlSettings(dotGithubPath: string): { filters: Filter[]; ignoreList: string[] } {
+        let ignoreList: string[] = [];
+        const filters: Filter[] = [];
+
+        try {
+            const stats = fs.lstatSync(dotGithubPath);
+
+            if (stats.isFile()) {
+                const yamlSettings: IYamlSettings = YAML.parse(fs.readFileSync(dotGithubPath, "utf8"));
+                const yamlFilters = yamlSettings.filters || [];
+
+                yamlFilters.forEach((filter) => {
+                    if (typeof filter === "object" && filter !== null) {
+                        if (typeof filter.filepath !== "undefined" && typeof filter.filter !== "undefined") {
+                            filters.push({
+                                filePath: filter.filepath,
+                                filter: filter.filter,
+                                strict: Boolean(filter.strict || false),
+                                count: 0,
+                                maxCount: filter.count || 1,
+                            } as Filter);
+                        } else {
+                            core.info(
+                                `Please provide the correct syntax for ${inspect(
+                                    filter,
+                                )}; Check the readme of https://github.com/narrowspark/template-sync-action.`,
+                            );
+                        }
+                    }
+                });
+
+                return {
+                    ignoreList: (yamlSettings.ignore_list as string[]) || [],
+                    filters,
+                };
+            }
+        } catch (e) {
+            core.info(`No settings file found under ${dotGithubPath}, continue without it...`);
+        }
+
+        return { ignoreList, filters };
+    }
 
     get authToken(): string {
         return this.settings.authToken;
@@ -149,9 +139,9 @@ export class Settings implements ISettings {
         return this.settings.repositoryName;
     }
 
-  get githubWorkspacePath(): string {
-    return this.settings.githubWorkspacePath
-  }
+    get githubWorkspacePath(): string {
+        return this.settings.githubWorkspacePath;
+    }
 
     get authorEmail(): string {
         return this.settings.authorEmail;
@@ -221,23 +211,23 @@ export class Settings implements ISettings {
         return this.settings.persistCredentials;
     }
 
-  set ignoreList(ignoreList: string[]) {
-    this.settings.ignoreList = ignoreList
-  }
+    set ignoreList(ignoreList: string[]) {
+        this.settings.ignoreList = ignoreList;
+    }
 
-  get ignoreList(): string[] {
-    return this.settings.ignoreList
-  }
+    get ignoreList(): string[] {
+        return this.settings.ignoreList;
+    }
 
-  set filters(filters: Filter[]) {
-    this.settings.filters = filters
-  }
+    set filters(filters: Filter[]) {
+        this.settings.filters = filters;
+    }
 
-  get filters(): Filter[] {
-    return this.settings.filters
-  }
+    get filters(): Filter[] {
+        return this.settings.filters;
+    }
 
-  get clean(): boolean {
-    return this.settings.clean
-  }
+    get clean(): boolean {
+        return this.settings.clean;
+    }
 }
