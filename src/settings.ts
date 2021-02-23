@@ -167,9 +167,9 @@ export class Settings implements ISettings {
         return this.settings.syncBranchName.replace("{0}", this.settings.templateRepository);
     }
 
-  get templateRepositoryRef(): string {
-    return this.settings.templateRepositoryRef
-  }
+    get templateRepositoryRef(): string {
+        return this.settings.templateRepositoryRef;
+    }
 
     set templateRepository(templateRepository: string) {
         this.settings.templateRepository = templateRepository;
