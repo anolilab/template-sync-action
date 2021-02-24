@@ -55,7 +55,7 @@
     "@actions/exec": "1.0.4",
     "@actions/io": "1.0.2",
     "@actions/tool-cache": "1.6.1",
-    "@octokit/action": "3.4.0",
+    "@octokit/action": "3.4.1",
     "@octokit/plugin-retry": "3.0.7",
     "filehound": "1.17.4",
     "fs-extra": "9.1.0",
