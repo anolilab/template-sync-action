@@ -68,7 +68,7 @@
     "@octokit/fixtures": "21.3.5",
     "@octokit/types": "6.11.1",
     "@types/bluebird": "3.5.33",
-    "@types/fs-extra": "9.0.7",
+    "@types/fs-extra": "9.0.8",
     "@types/jest": "26.0.20",
     "@types/js-yaml": "4.0.0",
     "@types/node": "12.20.4",
