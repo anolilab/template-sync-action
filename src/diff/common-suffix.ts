@@ -18,6 +18,8 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
+import { Utf32 } from "./utf32";
+
 /**
  * Determine the common suffix of two strings.
  *
@@ -26,11 +28,18 @@
  *
  * @return {number} The number of characters common to the end of each string.
  */
-export const commonSuffix = (text1: string, text2: string): number => {
+export const commonSuffix = (text1: string | Utf32, text2: string | Utf32): number => {
     // Quick check for common null cases.
     if (!text1 || !text2 || text1.charAt(text1.length - 1) != text2.charAt(text2.length - 1)) {
         return 0;
     }
+
+    // Check for Unicode
+    if (Utf32.hasSupplemental(text1) || Utf32.hasSupplemental(text2)) {
+        text1 = Utf32.from(text1 as string);
+        text2 = Utf32.from(text2 as string);
+    }
+
     // Binary search.
     // Performance analysis: https://neil.fraser.name/news/2007/10/09/
     let pointerMin = 0;
@@ -40,8 +49,8 @@ export const commonSuffix = (text1: string, text2: string): number => {
 
     while (pointerMin < pointerMid) {
         if (
-            text1.substring(text1.length - pointerMid, text1.length - pointerEnd) ==
-            text2.substring(text2.length - pointerMid, text2.length - pointerEnd)
+            text1.substring(text1.length - pointerMid, text1.length - pointerEnd).toString() ==
+            text2.substring(text2.length - pointerMid, text2.length - pointerEnd).toString()
         ) {
             pointerMin = pointerMid;
             pointerEnd = pointerMin;

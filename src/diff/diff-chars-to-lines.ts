@@ -19,6 +19,7 @@
  */
 
 import { Diff } from "./diff";
+import assertSafe from './assert-safe'
 
 /**
  * Rehydrate the text in a diff from a string of line hashes to real lines of
@@ -28,14 +29,23 @@ import { Diff } from "./diff";
  * @param {!Array.<string>} lineArray Array of unique strings.
  */
 export const diffCharsToLines = (diffs: Diff[], lineArray: string[]) => {
-    for (let i = 0; i < diffs.length; i++) {
-        const chars = diffs[i].text;
-        const text: string[] = [];
+    assertSafe(lineArray)
 
-        for (let j = 0; j < chars.length; j++) {
-            text[j] = lineArray[chars.charCodeAt(j)];
+    for (let x = 0; x < diffs.length; x++) {
+        const chars = diffs[x].text;
+        let text;
+
+        if (chars.length === 0) {
+            // don't lose string type (regular or utf32_string)
+            text = lineArray[0].substring(0, 0);
+        } else {
+            text = lineArray[chars.charCodeAt(0)]
         }
 
-        diffs[i].text = text.join("");
+        for (let y = 1; y < chars.length; y++) {
+            text = text.concat(lineArray[chars.charCodeAt(y)]);
+        }
+
+        diffs[x].text = text;
     }
 };

@@ -32,6 +32,8 @@ import { diffCommonOverlap } from "./diff-common-overlap";
 import { matchAlphabet } from "./match-alphabet";
 import { patchDeepObjectCopy } from "./patch-deep-object-copy";
 import { diffText } from "./diff-text";
+import { Utf32 } from "./utf32";
+import assertSafe from './assert-safe'
 
 export default class DiffMatchPatch {
     DiffTimeout: number;
@@ -48,6 +50,12 @@ export default class DiffMatchPatch {
     private static linebreakRegex = /[\r\n]/;
     private static blankLineEndRegex = /\n\r?\n$/;
     private static blankLineStartRegex = /^\r?\n\r?\n/;
+
+    // Maximum length of a match for blank line regexes
+    private static blankLineEndRegexMaxLength = 3;
+    private static blankLineStartRegexMaxLength = 4;
+
+    private utf32: Utf32;
 
     constructor() {
         // Defaults.
@@ -73,6 +81,8 @@ export default class DiffMatchPatch {
 
         // The number of bits in an int.
         this.MatchMaxBits = 32;
+
+        this.utf32 = new Utf32();
     }
 
     /**
@@ -103,12 +113,18 @@ export default class DiffMatchPatch {
         const deadline = optDeadline;
 
         // Check for equality (speedup).
-        if (text1 == text2) {
+        if (text1.toString() == text2.toString()) {
             if (text1 !== "") {
                 return [new Diff(DIFF_EQUAL, text1)];
             }
 
             return [];
+        }
+
+        // Check for Unicode
+        if (Utf32.hasSupplemental(text1) || Utf32.hasSupplemental(text2)) {
+            text1 = this.utf32.from(text1);
+            text2 = this.utf32.from(text2);
         }
 
         if (typeof optCheckLines == "undefined") {
@@ -137,11 +153,11 @@ export default class DiffMatchPatch {
         const diffs = this.diffCompute(text1, text2, checkLines, deadline);
 
         // Restore the prefix and suffix.
-        if (prefix) {
+        if (prefix.length) {
             diffs.unshift(new Diff(DIFF_EQUAL, prefix));
         }
 
-        if (suffix) {
+        if (suffix.length) {
             diffs.push(new Diff(DIFF_EQUAL, suffix));
         }
 
@@ -243,6 +259,9 @@ export default class DiffMatchPatch {
      * @private
      */
     private diffLineMode(text1: string, text2: string, deadline: number): Diff[] {
+        assertSafe(text1);
+        assertSafe(text2);
+
         // Scan the text on a line-by-line basis first.
         const a = diffLinesToChars(text1, text2);
         text1 = a.chars1;
@@ -322,6 +341,9 @@ export default class DiffMatchPatch {
      * @private
      */
     private diffBisect(text1: string, text2: string, deadline: number): Diff[] {
+        assertSafe(text1);
+        assertSafe(text2);
+
         // Cache the text lengths to prevent multiple calls.
         const text1Length = text1.length;
         const text2Length = text2.length;
@@ -467,6 +489,9 @@ export default class DiffMatchPatch {
      * @private
      */
     private diffBisectSplit(text1: string, text2: string, x: number, y: number, deadline: number): Diff[] {
+        assertSafe(text1);
+        assertSafe(text2);
+
         const text1a = text1.substring(0, x);
         const text2a = text2.substring(0, y);
         const text1b = text1.substring(x);
@@ -717,17 +742,18 @@ export default class DiffMatchPatch {
      */
     private cleanupSemanticLossless(diffs: Diff[]) {
         /**
-         * Given two strings, compute a score representing whether the internal
+         * Given a string and a boundary, compute a score representing whether the
          * boundary falls on logical boundaries.
          * Scores range from 6 (best) to 0 (worst).
          * Closure, but does not reference any external variables.
-         * @param {string} one First string.
-         * @param {string} two Second string.
+         *
+         * @param {string} buffer String containing the boundary and surrounding text.
+         * @param {number} index Index of the boundary.
          * @return {number} The score.
          * @private
          */
-        function diffCleanupSemanticScore(one: string, two: string): number {
-            if (!one || !two) {
+        function diffCleanupSemanticScore(buffer: string, index: number): number {
+            if (index === 0 || index === buffer.length) {
                 // Edges are the best.
                 return 6;
             }
@@ -737,16 +763,24 @@ export default class DiffMatchPatch {
             // 'whitespace'.  Since this function's purpose is largely cosmetic,
             // the choice has been made to use each language's native features
             // rather than force total conformity.
-            const char1 = one.charAt(one.length - 1);
-            const char2 = two.charAt(0);
+            const char1 = buffer.charAt(index - 1);
+            const char2 = buffer.charAt(index);
             const nonAlphaNumeric1 = char1.match(DiffMatchPatch.nonAlphaNumericRegex);
             const nonAlphaNumeric2 = char2.match(DiffMatchPatch.nonAlphaNumericRegex);
             const whitespace1 = nonAlphaNumeric1 && char1.match(DiffMatchPatch.whitespaceRegex);
             const whitespace2 = nonAlphaNumeric2 && char2.match(DiffMatchPatch.whitespaceRegex);
             const lineBreak1 = whitespace1 && char1.match(DiffMatchPatch.linebreakRegex);
             const lineBreak2 = whitespace2 && char2.match(DiffMatchPatch.linebreakRegex);
-            const blankLine1 = lineBreak1 && one.match(DiffMatchPatch.blankLineEndRegex);
-            const blankLine2 = lineBreak2 && two.match(DiffMatchPatch.blankLineStartRegex);
+            const blankLine1 =
+                lineBreak1 &&
+                buffer
+                    .substring(index - DiffMatchPatch.blankLineEndRegexMaxLength, index)
+                    .match(DiffMatchPatch.blankLineEndRegex);
+            const blankLine2 =
+                lineBreak2 &&
+                buffer
+                    .substring(index, index + DiffMatchPatch.blankLineStartRegexMaxLength)
+                    .match(DiffMatchPatch.blankLineStartRegex);
 
             if (blankLine1 || blankLine2) {
                 // Five points for blank lines.
@@ -777,51 +811,47 @@ export default class DiffMatchPatch {
                 let equality1 = diffs[pointer - 1].text;
                 let edit = diffs[pointer].text;
                 let equality2 = diffs[pointer + 1].text;
+                let buffer = equality1 + edit + equality2;
 
                 // First, shift the edit as far left as possible.
-                const commonOffset = commonSuffix(equality1, edit);
-                if (commonOffset) {
-                    const commonString = edit.substring(edit.length - commonOffset);
-
-                    equality1 = equality1.substring(0, equality1.length - commonOffset);
-                    edit = commonString + edit.substring(0, edit.length - commonOffset);
-                    equality2 = commonString + equality2;
-                }
+                let offsetLeft = commonSuffix(equality1, edit);
+                let offsetRight = commonPrefix(edit, equality2);
+                let originalEditStart = equality1.length;
+                let editStart = originalEditStart - offsetLeft;
+                let maxEditStart = originalEditStart + offsetRight;
+                let editEnd = editStart + edit.length;
 
                 // Second, step character by character right, looking for the best fit.
-                let bestEquality1 = equality1;
-                let bestEdit = edit;
-                let bestEquality2 = equality2;
-                let bestScore = diffCleanupSemanticScore(equality1, edit) + diffCleanupSemanticScore(edit, equality2);
+                let bestEditStart = editStart;
+                let bestEditEnd = editEnd;
+                let bestScore = diffCleanupSemanticScore(buffer, editStart) + diffCleanupSemanticScore(buffer, editEnd);
 
-                while (edit.charAt(0) === equality2.charAt(0)) {
-                    equality1 += edit.charAt(0);
-                    edit = edit.substring(1) + equality2.charAt(0);
-                    equality2 = equality2.substring(1);
+                while (editStart < maxEditStart) {
+                    editStart += 1;
+                    editEnd += 1;
 
-                    const score = diffCleanupSemanticScore(equality1, edit) + diffCleanupSemanticScore(edit, equality2);
+                    const score =
+                        diffCleanupSemanticScore(buffer, editStart) + diffCleanupSemanticScore(buffer, editEnd);
+
                     // The >= encourages trailing rather than leading whitespace on edits.
                     if (score >= bestScore) {
                         bestScore = score;
-                        bestEquality1 = equality1;
-                        bestEdit = edit;
-                        bestEquality2 = equality2;
+                        bestEditStart = editStart;
+                        bestEditEnd = editEnd;
                     }
                 }
 
-                if (diffs[pointer - 1].text != bestEquality1) {
+                if (bestEditStart != originalEditStart) {
                     // We have an improvement, save it back to the diff.
-                    if (bestEquality1) {
-                        diffs[pointer - 1].text = bestEquality1;
+                    if (bestEditStart > 0) {
+                        diffs[pointer - 1][1] = buffer.substring(0, bestEditStart);
                     } else {
                         diffs.splice(pointer - 1, 1);
                         pointer--;
                     }
-
-                    diffs[pointer].text = bestEdit;
-
-                    if (bestEquality2) {
-                        diffs[pointer + 1].text = bestEquality2;
+                    diffs[pointer][1] = buffer.substring(bestEditStart, bestEditEnd);
+                    if (bestEditEnd < buffer.length) {
+                        diffs[pointer + 1][1] = buffer.substring(bestEditEnd);
                     } else {
                         diffs.splice(pointer + 1, 1);
                         pointer--;
@@ -1024,6 +1054,8 @@ export default class DiffMatchPatch {
      * @return {number} Best match index or -1.
      */
     private matchBiTap(text: string, pattern: string, loc: number): number {
+        assertSafe(text);
+
         if (pattern.length > this.MatchMaxBits) {
             throw new Error("Pattern too long for this browser.");
         }
@@ -1175,7 +1207,7 @@ export default class DiffMatchPatch {
         let charCount2 = 0; // Number of characters into the text2 string.
 
         // Start with text1 (prePatchText) and apply the diffs until we arrive at
-        // text2 (postPatchText).  We recreate the patches one by one to determine
+        // text2 (postPatchText). We recreate the patches one by one to determine
         // context info.
         let prePatchText = text1;
         let postPatchText = text1;
@@ -1195,13 +1227,13 @@ export default class DiffMatchPatch {
                     patch.diffs[patchDiffLength++] = diffs[x];
                     patch.length2 += diffText.length;
                     postPatchText =
-                        postPatchText.substring(0, charCount2) + diffText + postPatchText.substring(charCount2);
+                        postPatchText.substring(0, charCount2).concat(diffText, postPatchText.substring(charCount2));
                     break;
                 case DIFF_DELETE:
                     patch.length1 += diffText.length;
                     patch.diffs[patchDiffLength++] = diffs[x];
                     postPatchText =
-                        postPatchText.substring(0, charCount2) + postPatchText.substring(charCount2 + diffText.length);
+                        postPatchText.substring(0, charCount2).concat(postPatchText.substring(charCount2 + diffText.length));
                     break;
                 case DIFF_EQUAL:
                     if (diffText.length <= 2 * this.PatchMargin && patchDiffLength && diffs.length != x + 1) {
@@ -1226,6 +1258,11 @@ export default class DiffMatchPatch {
                         }
                     }
                     break;
+            }
+
+            // Check for Unicode
+            if (this.utf32.hasSupplemental(text)) {
+                text = this.utf32.from(text);
             }
 
             // Update the current character count.
@@ -1563,6 +1600,8 @@ export default class DiffMatchPatch {
      * @private
      */
     private patchAddContext(patch: PatchObject, text: string) {
+        assertSafe(text);
+
         if (text.length == 0) {
             return;
         }
@@ -1589,14 +1628,14 @@ export default class DiffMatchPatch {
         // Add the prefix.
         const prefix = text.substring(patch.start2 - padding, patch.start2);
 
-        if (prefix) {
+        if (prefix.length) {
             patch.diffs.unshift(new Diff(DIFF_EQUAL, prefix));
         }
 
         // Add the suffix.
         const suffix = text.substring(patch.start2 + patch.length1, patch.start2 + patch.length1 + padding);
 
-        if (suffix) {
+        if (suffix.length) {
             patch.diffs.push(new Diff(DIFF_EQUAL, suffix));
         }
 

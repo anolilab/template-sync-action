@@ -17,6 +17,7 @@
  *
  * @author fraser@google.com (Neil Fraser)
  */
+import assertSafe from "./assert-safe";
 
 interface IOutput {
     chars1: string;
@@ -37,12 +38,15 @@ interface IOutput {
  *     The zeroth element of the array of unique strings is intentionally blank.
  */
 export const diffLinesToChars = (text1: string, text2: string): IOutput => {
+    assertSafe(text1);
+    assertSafe(text2);
+
     const lineArray: string[] = []; // e.g. lineArray[4] == 'Hello\n'
     const lineHash: { [key: string]: number } = {}; // e.g. lineHash['Hello\n'] == 4
 
     // '\x00' is a valid character, but various debuggers don't like it.
     // So we'll insert a junk entry to avoid generating a null character.
-    lineArray[0] = "";
+    lineArray[0] = text1.substring(0, 0);
 
     /**
      * Split a text into an array of strings.  Reduce the texts to a string of
@@ -70,9 +74,10 @@ export const diffLinesToChars = (text1: string, text2: string): IOutput => {
             }
 
             let line = text.substring(lineStart, lineEnd + 1);
+            const lineKey = line.toString();
 
-            if (lineHash.hasOwnProperty ? lineHash.hasOwnProperty(line) : lineHash[line] !== undefined) {
-                chars += String.fromCharCode(lineHash[line]);
+            if (lineHash.hasOwnProperty ? lineHash.hasOwnProperty(lineKey) : lineHash[lineKey] !== undefined) {
+                chars += String.fromCharCode(lineHash[lineKey]);
             } else {
                 if (lineArrayLength == maxLines) {
                     // Bail out at 65535 because
@@ -82,7 +87,7 @@ export const diffLinesToChars = (text1: string, text2: string): IOutput => {
                 }
 
                 chars += String.fromCharCode(lineArrayLength);
-                lineHash[line] = lineArrayLength;
+                lineHash[lineKey] = lineArrayLength;
                 lineArray[lineArrayLength++] = line;
             }
 

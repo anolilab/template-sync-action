@@ -18,6 +18,8 @@
  * @author fraser@google.com (Neil Fraser)
  */
 
+import {Utf32} from './utf32'
+
 /**
  * Determine the common prefix of two strings.
  *
@@ -32,6 +34,13 @@ export const commonPrefix = (text1: string, text2: string): number => {
     if (!text1 || !text2 || text1.charAt(0) != text2.charAt(0)) {
         return 0;
     }
+
+    // Check for Unicode
+    if (Utf32.hasSupplemental(text1) || Utf32.hasSupplemental(text2)) {
+        text1 = Utf32.from(text1);
+        text2 = Utf32.from(text2);
+    }
+
     // Binary search.
     // Performance analysis: https://neil.fraser.name/news/2007/10/09/
     let pointerMin = 0;
@@ -40,7 +49,7 @@ export const commonPrefix = (text1: string, text2: string): number => {
     let pointerStart = 0;
 
     while (pointerMin < pointerMid) {
-        if (text1.substring(pointerStart, pointerMid) == text2.substring(pointerStart, pointerMid)) {
+        if (text1.substring(pointerStart, pointerMid).toString() == text2.substring(pointerStart, pointerMid).toString()) {
             pointerMin = pointerMid;
             pointerStart = pointerMin;
         } else {

@@ -56,7 +56,6 @@
     "@octokit/action": "^3.4.0",
     "@octokit/plugin-retry": "^3.0.7",
     "@octokit/core": "^3.2.5",
-    "diff": "^5.0.0",
     "filehound": "^1.17.4",
     "fs-extra": "^9.1.0",
     "uuid": "^8.3.2",
