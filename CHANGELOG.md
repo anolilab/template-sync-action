@@ -1,3 +1,10 @@
+## [1.0.0-alpha.9](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2021-03-01)
+
+
+### Bug Fixes
+
+* fixed release flow ([515274b](https://github.com/narrowspark/template-sync-action/commit/515274b1b50d775abdcfabfd6a34f5da1ef84d8b))
+
 ## [1.0.0-alpha.8](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2021-02-22)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "template-sync-action",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.9",
   "private": true,
   "description": "Keep your github template fork up to date.",
   "keywords": [
