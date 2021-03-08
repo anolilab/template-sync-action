@@ -67,7 +67,7 @@ jobs:
     ssh-strict: ''
 
     # Whether to configure the token or SSH key with the local git config
-    # Default: true
+    # Default: false
     persist-credentials: ''
 
     # Includes your name to the commit
