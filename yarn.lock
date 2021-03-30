@@ -826,15 +826,15 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@octokit/action@3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.0.tgz#2d2c40c57933c161bdf5501044078d41b43e35c9"
-  integrity sha512-2ArG1CsvZtoZh4LhjCYlnMhdQvL7WCX75iN+Rhb4EXf7yNd7RSOwBxgij2TdcGqh4vLUguej1cqkoGWFmz2/Nw==
+"@octokit/action@3.7.1":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.1.tgz#68c6a217d00279271ae124c0d41ded286a416b10"
+  integrity sha512-2ZxvDhqBFSOhIMycti7v11x4eKT5afHVx32Q/O2YUK8rwQRp4CPcKR7Nq6A/+YN3EWqOM8MD4tCobLr8UFKjSw==
   dependencies:
     "@octokit/auth-action" "^1.2.0"
     "@octokit/core" "^3.0.0"
     "@octokit/plugin-paginate-rest" "^2.2.4"
-    "@octokit/plugin-rest-endpoint-methods" "4.15.0"
+    "@octokit/plugin-rest-endpoint-methods" "5.0.0"
     "@octokit/types" "^6.0.3"
 
 "@octokit/auth-action@^1.2.0":
@@ -909,10 +909,10 @@
   dependencies:
     "@octokit/types" "^6.10.0"
 
-"@octokit/plugin-rest-endpoint-methods@4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-4.15.0.tgz#120b649144614989413915d5fff9198c4f7535fd"
-  integrity sha512-1AF9GM/Ywk8ukUM5seDRj286GdFpdfsHeOrOPBV2rVtRN7MQNzRIcw8W5sb4JPerjQ0WcRRwAwQyufg64BxJkA==
+"@octokit/plugin-rest-endpoint-methods@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.0.0.tgz#cf2cdeb24ea829c31688216a5b165010b61f9a98"
+  integrity sha512-Jc7CLNUueIshXT+HWt6T+M0sySPjF32mSFQAK7UfAg8qGeRI6OM1GSBxDLwbXjkqy2NVdnqCedJcP1nC785JYg==
   dependencies:
     "@octokit/types" "^6.13.0"
     deprecation "^2.3.1"
