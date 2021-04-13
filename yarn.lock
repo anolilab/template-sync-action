@@ -43,10 +43,10 @@
     semver "^6.1.0"
     uuid "^3.3.2"
 
-"@anolilab/eslint-config@1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@anolilab/eslint-config/-/eslint-config-1.1.3.tgz#3fef7ccc5343f34abad4c875664dfcea6403a8a4"
-  integrity sha512-Vi9bq9Oe5mg9ig4CBoofBRLm57+b0CcMAUTCFcPedGMOWx+Op9KMu87qppHnVbbtSciND/TBGlHCyN2/XufIzQ==
+"@anolilab/eslint-config@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@anolilab/eslint-config/-/eslint-config-1.1.4.tgz#bdbe0a94a85b9496f67984751bfe73705a43306c"
+  integrity sha512-8In3mF7i+wGbU2kD9hN1U9XFJ8+ukn+HbT8ZDjVosM4tonWxaNkwLimXDd4dLlU+nfi0yjf8fEhJZgE2pX78+Q==
   dependencies:
     "@rushstack/eslint-plugin-security" "^0.1.3"
     arrify "^2.0.1"
@@ -58,9 +58,9 @@
     eslint-plugin-import "^2.22.1"
     eslint-plugin-markdown "^2.0.0"
     eslint-plugin-no-loops "^0.3.0"
-    eslint-plugin-no-secrets "^0.7.0"
+    eslint-plugin-no-secrets "^0.8.0"
     eslint-plugin-optimize-regex "^1.2.0"
-    eslint-plugin-promise "^4.2.1"
+    eslint-plugin-promise "^5.0.0"
     eslint-plugin-radar "^0.2.0"
     eslint-plugin-simple-import-sort "^7.0.0"
     eslint-plugin-sort-keys-fix "^1.1.1"
@@ -3440,10 +3440,10 @@ eslint-plugin-no-loops@^0.3.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-no-loops/-/eslint-plugin-no-loops-0.3.0.tgz#e81fecb4eaaf494a926d9caba9a7cd84d1fede7d"
   integrity sha1-6B/stOqvSUqSbZyrqafNhNH+3n0=
 
-eslint-plugin-no-secrets@^0.7.0:
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-no-secrets/-/eslint-plugin-no-secrets-0.7.9.tgz#f5658adb8ebd9653ae7ae2eb7ebf26b909e63f65"
-  integrity sha512-6gptwSr864TkKPOmk2f5tR3RoaBrMMbObLCDyqBS+Q4/KCv7iwPrh9mM946WHNenLfAuzLlTLCukNM6TxdiVng==
+eslint-plugin-no-secrets@^0.8.0:
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-no-secrets/-/eslint-plugin-no-secrets-0.8.9.tgz#5a7cfdf8816dffdc0aa45cd2b28dfda249629523"
+  integrity sha512-CqaBxXrImABCtxMWspAnm8d5UKkpNylC7zqVveb+fJHEvsSiNGJlSWzdSIvBUnW1XhJXkzifNIZQC08rEII5Ng==
 
 eslint-plugin-node@^11.1.0:
   version "11.1.0"
@@ -3469,10 +3469,10 @@ eslint-plugin-prefer-object-spread@^1.2.1:
   resolved "https://registry.yarnpkg.com/eslint-plugin-prefer-object-spread/-/eslint-plugin-prefer-object-spread-1.2.1.tgz#27fb91853690cceb3ae6101d9c8aecc6a67a402c"
   integrity sha1-J/uRhTaQzOs65hAdnIrsxqZ6QCw=
 
-eslint-plugin-promise@^4.2.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-4.3.1.tgz#61485df2a359e03149fdafc0a68b0e030ad2ac45"
-  integrity sha512-bY2sGqyptzFBDLh/GMbAxfdJC+b0f23ME63FOE4+Jao0oZ3E1LEwFtWJX/1pGMJLiTtrSSern2CRM/g+dfc0eQ==
+eslint-plugin-promise@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-5.1.0.tgz#fb2188fb734e4557993733b41aa1a688f46c6f24"
+  integrity sha512-NGmI6BH5L12pl7ScQHbg7tvtk4wPxxj8yPHH47NvSmMtFneC077PSeY3huFj06ZWZvtbfxSPt3RuOQD5XcR4ng==
 
 eslint-plugin-radar@^0.2.0:
   version "0.2.1"
