@@ -62,7 +62,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@anolilab/eslint-config": "1.1.4",
+    "@anolilab/eslint-config": "1.1.5",
     "@anolilab/textlint-config": "1.0.1",
     "@anolilab/prettier-config": "1.0.0",
     "@octokit/fixtures": "21.3.9",

@@ -48,10 +48,10 @@
     semver "^6.1.0"
     uuid "^3.3.2"
 
-"@anolilab/eslint-config@1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@anolilab/eslint-config/-/eslint-config-1.1.4.tgz#bdbe0a94a85b9496f67984751bfe73705a43306c"
-  integrity sha512-8In3mF7i+wGbU2kD9hN1U9XFJ8+ukn+HbT8ZDjVosM4tonWxaNkwLimXDd4dLlU+nfi0yjf8fEhJZgE2pX78+Q==
+"@anolilab/eslint-config@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@anolilab/eslint-config/-/eslint-config-1.1.5.tgz#bba3fadbdc1e68819a35bc48e4e1ed3b7acd96dd"
+  integrity sha512-PWNfxlpJcVLHN2s1iI5HnnsZzUgpqblYaFQw0aFAFg43hqQWatbOPP9MEu2Tq64T6tBzuIQGiV555BAMuLSjzQ==
   dependencies:
     "@rushstack/eslint-plugin-security" "^0.1.3"
     arrify "^2.0.1"
