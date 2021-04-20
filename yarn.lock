@@ -836,10 +836,10 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@octokit/action@3.7.1":
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.1.tgz#68c6a217d00279271ae124c0d41ded286a416b10"
-  integrity sha512-2ZxvDhqBFSOhIMycti7v11x4eKT5afHVx32Q/O2YUK8rwQRp4CPcKR7Nq6A/+YN3EWqOM8MD4tCobLr8UFKjSw==
+"@octokit/action@3.7.2":
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.2.tgz#68a1c144cf4b2217ef72a411a032f73a750129ad"
+  integrity sha512-5GjtXPPmPnJLAYcUrpBcOj8EdYcxKXp0SiUzy7iGLViH4VFr/9BdUuSMDfy5DBhFGC+1jQjjZDpMAqnYOG687w==
   dependencies:
     "@octokit/auth-action" "^1.2.0"
     "@octokit/core" "^3.0.0"
