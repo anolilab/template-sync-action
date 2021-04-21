@@ -836,15 +836,15 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@octokit/action@3.7.2":
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.2.tgz#68a1c144cf4b2217ef72a411a032f73a750129ad"
-  integrity sha512-5GjtXPPmPnJLAYcUrpBcOj8EdYcxKXp0SiUzy7iGLViH4VFr/9BdUuSMDfy5DBhFGC+1jQjjZDpMAqnYOG687w==
+"@octokit/action@3.7.3":
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-3.7.3.tgz#06ce9398d4e5dd21599d794d87f30dcc80da52b7"
+  integrity sha512-u9snwkEZUHEG/JuwxgwK9x2eugpbtvytmIzalXNhvtTZbZD2nkJtGkPaY1o336aFS2DbE+bFPa/TJK9ZyogAoA==
   dependencies:
     "@octokit/auth-action" "^1.2.0"
     "@octokit/core" "^3.0.0"
     "@octokit/plugin-paginate-rest" "^2.2.4"
-    "@octokit/plugin-rest-endpoint-methods" "5.0.0"
+    "@octokit/plugin-rest-endpoint-methods" "5.0.1"
     "@octokit/types" "^6.0.3"
 
 "@octokit/auth-action@^1.2.0":
@@ -919,12 +919,12 @@
   dependencies:
     "@octokit/types" "^6.10.0"
 
-"@octokit/plugin-rest-endpoint-methods@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.0.0.tgz#cf2cdeb24ea829c31688216a5b165010b61f9a98"
-  integrity sha512-Jc7CLNUueIshXT+HWt6T+M0sySPjF32mSFQAK7UfAg8qGeRI6OM1GSBxDLwbXjkqy2NVdnqCedJcP1nC785JYg==
+"@octokit/plugin-rest-endpoint-methods@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.0.1.tgz#631b8d4edc6798b03489911252a25f2a4e58c594"
+  integrity sha512-vvWbPtPqLyIzJ7A4IPdTl+8IeuKAwMJ4LjvmqWOOdfSuqWQYZXq2CEd0hsnkidff2YfKlguzujHs/reBdAx8Sg==
   dependencies:
-    "@octokit/types" "^6.13.0"
+    "@octokit/types" "^6.13.1"
     deprecation "^2.3.1"
 
 "@octokit/plugin-retry@3.0.7":
@@ -958,7 +958,7 @@
     once "^1.4.0"
     universal-user-agent "^6.0.0"
 
-"@octokit/types@6.13.1":
+"@octokit/types@6.13.1", "@octokit/types@^6.13.1":
   version "6.13.1"
   resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.13.1.tgz#85f447f97dc7edb672f221df51f56a51785c131a"
   integrity sha512-UF/PL0y4SKGx/p1azFf7e6j9lB78tVwAFvnHtslzOJ6VipshYks74qm9jjTEDlCyaTmbhbk2h3Run5l0CtCF6A==
@@ -971,13 +971,6 @@
   integrity sha512-aMDo10kglofejJ96edCBIgQLVuzMDyjxmhdgEcoUUD64PlHYSrNsAGqN0wZtoiX4/PCQ3JLA50IpkP1bcKD/cA==
   dependencies:
     "@octokit/openapi-types" "^5.1.0"
-
-"@octokit/types@^6.13.0":
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.13.0.tgz#779e5b7566c8dde68f2f6273861dd2f0409480d0"
-  integrity sha512-W2J9qlVIU11jMwKHUp5/rbVUeErqelCsO5vW5PKNb7wAXQVUz87Rc+imjlEvpvbH8yUb+KHmv8NEjVZdsdpyxA==
-  dependencies:
-    "@octokit/openapi-types" "^6.0.0"
 
 "@rushstack/eslint-plugin-security@^0.1.3":
   version "0.1.3"
