@@ -58,7 +58,7 @@
     "@octokit/action": "3.8.1",
     "@octokit/plugin-retry": "3.0.7",
     "filehound": "1.17.4",
-    "fs-extra": "9.1.0",
+    "fs-extra": "10.0.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {
