@@ -1,3 +1,10 @@
+## [1.0.0-alpha.10](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2021-09-24)
+
+
+### Bug Fixes
+
+* updated all deps ([3647eaa](https://github.com/narrowspark/template-sync-action/commit/3647eaa1700e2f06e94f2dbd8c9736abf792298a))
+
 ## [1.0.0-alpha.9](https://github.com/narrowspark/template-sync-action/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2021-03-01)
 
 
