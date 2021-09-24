@@ -50,16 +50,9 @@ export class Settings implements ISettings {
             templateRepositoryUrl: "",
             templateRepositoryPath: (process.env["STATE_template_repository_path"] as string) || "",
 
-            ignoreList: [
-                ".git$",
-                ".changelog",
-                ".editorconfig",
-                ".gitignore",
-                "CHANGELOG.md",
-                "LICENSE.md",
-                "README.md",
-                "UPGRADE.md",
-            ].concat(core.getInput("ignore_list", { required: false }) || []),
+            ignoreList: [".git$", ".changelog", ".editorconfig", ".gitignore", "CHANGELOG.md", "LICENSE.md", "README.md", "UPGRADE.md"].concat(
+                core.getInput("ignore_list", { required: false }) || [],
+            ),
             clean: (core.getInput("clean") || "true").toUpperCase() === "TRUE",
         };
     }

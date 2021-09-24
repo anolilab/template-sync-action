@@ -8,6 +8,17 @@
 
 This [github action](https://github.com/features/actions) gives you the possibility to sync your repository with a [github template repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 
+---
+
+<div align="center">
+    <p>
+        <sup>
+            Daniel Bannert's open source work is supported by the community on <a href="https://github.com/sponsors/prisis">GitHub Sponsors</a>
+        </sup>
+    </p>
+</div>
+
+---
 
 ## Example Workflow
 ```yml

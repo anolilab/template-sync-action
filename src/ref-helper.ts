@@ -14,7 +14,7 @@ export async function getCheckoutInfo(git: IGitCommandManager, ref: string): Pro
         throw new Error("Args ref cannot be empty");
     }
 
-    const result = ({} as unknown) as ICheckoutInfo;
+    const result = {} as unknown as ICheckoutInfo;
     const upperRef = (ref || "").toUpperCase();
 
     // refs/heads/

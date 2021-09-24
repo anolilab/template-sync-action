@@ -1,3 +1,7 @@
-dist/
-lib/
-node_modules/
+.gitkeep
+.env*
+*.ico
+*.lock
+db/migrations
+dist
+CHANGELOG.md

@@ -35,25 +35,14 @@ async function run(): Promise<void> {
             // Register problem matcher
             coreCommand.issueCommand("add-matcher", {}, path.join(__dirname, "problem-matcher.json"));
 
-            if (
-                !(await githubManager.branch.has(
-                    settings.repositoryOwner,
-                    settings.repositoryName,
-                    settings.syncBranchName,
-                ))
-            ) {
+            if (!(await githubManager.branch.has(settings.repositoryOwner, settings.repositoryName, settings.syncBranchName))) {
                 const baseBranch = await githubManager.branch.get(
                     settings.repositoryOwner,
                     settings.repositoryName,
                     settings.ref.replace(/^refs\/heads\//, ""),
                 );
 
-                await githubManager.branch.create(
-                    settings.repositoryOwner,
-                    settings.repositoryName,
-                    baseBranch.data.object.sha,
-                    settings.syncBranchName,
-                );
+                await githubManager.branch.create(settings.repositoryOwner, settings.repositoryName, baseBranch.data.object.sha, settings.syncBranchName);
             }
 
             const mainGitCommandManager = await createCommandManager(settings.repositoryPath);
@@ -75,21 +64,14 @@ async function run(): Promise<void> {
             );
 
             // find all files
-            const files: string[] = filehound
-                .path(settings.templateRepositoryPath)
-                .discard(settings.ignoreList)
-                .findSync();
+            const files: string[] = filehound.path(settings.templateRepositoryPath).discard(settings.ignoreList).findSync();
 
             core.debug(`List of found files ${inspect(files)}`);
 
             for (const file of files) {
-                fs.copySync(
-                    file,
-                    path.join(settings.githubWorkspacePath, file.replace(settings.templateRepositoryPath, "")),
-                    {
-                        overwrite: true,
-                    },
-                );
+                fs.copySync(file, path.join(settings.githubWorkspacePath, file.replace(settings.templateRepositoryPath, "")), {
+                    overwrite: true,
+                });
             }
 
             await io.rmRF(settings.templateRepositoryPath);
@@ -141,7 +123,7 @@ async function run(): Promise<void> {
             coreCommand.issueCommand("remove-matcher", { owner: "checkout-git" }, "");
         }
     } catch (error) {
-        core.setFailed(error.message);
+        core.setFailed((error as Error).message);
     }
 }
 
@@ -154,9 +136,7 @@ async function prepareTemplateSettings(settings: ISettings, githubManager: Githu
         if (repoData.data.template_repository !== undefined) {
             template = repoData.data.template_repository.full_name;
         } else {
-            core.setFailed(
-                'Template repository not found, please provide "template_repository" key, that you want to check',
-            );
+            core.setFailed('Template repository not found, please provide "template_repository" key, that you want to check');
 
             process.exit(1); // there is currently no neutral exit code
         }
@@ -181,9 +161,7 @@ async function prepareTemplateSettings(settings: ISettings, githubManager: Githu
     );
 
     if (!(settings.templateRepositoryPath + path.sep).startsWith(settings.githubWorkspacePath + path.sep)) {
-        throw new Error(
-            `Repository path '${settings.templateRepositoryPath}' is not under '${settings.githubWorkspacePath}'`,
-        );
+        throw new Error(`Repository path '${settings.templateRepositoryPath}' is not under '${settings.githubWorkspacePath}'`);
     }
 
     if (settings.sshKey) {

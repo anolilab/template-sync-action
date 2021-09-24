@@ -9,11 +9,7 @@ export class RetryHelper {
     private minSeconds: number;
     private maxSeconds: number;
 
-    constructor(
-        maxAttempts: number = defaultMaxAttempts,
-        minSeconds: number = defaultMinSeconds,
-        maxSeconds: number = defaultMaxSeconds,
-    ) {
+    constructor(maxAttempts: number = defaultMaxAttempts, minSeconds: number = defaultMinSeconds, maxSeconds: number = defaultMaxSeconds) {
         this.maxAttempts = maxAttempts;
         this.minSeconds = Math.floor(minSeconds);
         this.maxSeconds = Math.floor(maxSeconds);
@@ -31,7 +27,7 @@ export class RetryHelper {
             try {
                 return await action();
             } catch (err) {
-                core.info(err.message);
+                core.info((err as Error).message);
             }
 
             // Sleep

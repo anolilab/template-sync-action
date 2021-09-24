@@ -79,9 +79,7 @@ export async function getSource(
     // Disable automatic garbage collection
     core.startGroup("Disabling automatic garbage collection");
     if (!(await git.tryDisableAutomaticGarbageCollection())) {
-        core.warning(
-            `Unable to turn off git automatic garbage collection. The git fetch operation may trigger garbage collection and cause a delay.`,
-        );
+        core.warning(`Unable to turn off git automatic garbage collection. The git fetch operation may trigger garbage collection and cause a delay.`);
     }
     core.endGroup();
 

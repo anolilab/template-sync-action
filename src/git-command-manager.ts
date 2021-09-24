@@ -76,9 +76,7 @@ export class GitCommandManager implements IGitCommandManager {
         }
 
         if (!this.gitVersion.checkMinimum(MinimumGitVersion)) {
-            throw new Error(
-                `Minimum required git version is ${MinimumGitVersion}. Your git ('${this.gitPath}') is ${this.gitVersion}`,
-            );
+            throw new Error(`Minimum required git version is ${MinimumGitVersion}. Your git ('${this.gitPath}') is ${this.gitVersion}`);
         }
     }
 
@@ -91,15 +89,7 @@ export class GitCommandManager implements IGitCommandManager {
     }
 
     async fetch(fetchDepth: number, refSpec: string[]): Promise<void> {
-        const args = [
-            "-c",
-            "protocol.version=2",
-            "fetch",
-            "--no-tags",
-            "--prune",
-            "--progress",
-            "--no-recurse-submodules",
-        ];
+        const args = ["-c", "protocol.version=2", "fetch", "--no-tags", "--prune", "--progress", "--no-recurse-submodules"];
 
         if (fetchDepth > 0) {
             args.push(`--depth=${fetchDepth}`);
@@ -155,19 +145,13 @@ export class GitCommandManager implements IGitCommandManager {
         const pattern = configKey.replace(/[^a-zA-Z0-9_]/g, (x) => {
             return `\\${x}`;
         });
-        const output = await this.execGit(
-            ["config", globalConfig ? "--global" : "--local", "--name-only", "--get-regexp", pattern],
-            true,
-        );
+        const output = await this.execGit(["config", globalConfig ? "--global" : "--local", "--name-only", "--get-regexp", pattern], true);
 
         return output.exitCode === 0;
     }
 
     async tryConfigUnset(configKey: string, globalConfig?: boolean): Promise<boolean> {
-        const output = await this.execGit(
-            ["config", globalConfig ? "--global" : "--local", "--unset-all", configKey],
-            true,
-        );
+        const output = await this.execGit(["config", globalConfig ? "--global" : "--local", "--unset-all", configKey], true);
 
         return output.exitCode === 0;
     }

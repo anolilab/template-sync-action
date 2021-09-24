@@ -20,7 +20,9 @@ export class GitAuthHelper {
     private readonly tokenConfigKey: string;
     private readonly tokenConfigValue: string;
     private readonly tokenPlaceholderConfigValue: string;
+    // @ts-ignore
     private readonly insteadOfKey: string;
+    // @ts-ignore
     private readonly insteadOfValue: string;
     private sshCommand = "";
     private sshKeyPath = "";
@@ -83,9 +85,7 @@ export class GitAuthHelper {
         if (IS_WINDOWS) {
             const icacls = await io.which("icacls.exe");
 
-            await exec.exec(
-                `"${icacls}" "${this.sshKeyPath}" /grant:r "${process.env["USERDOMAIN"]}\\${process.env["USERNAME"]}:F"`,
-            );
+            await exec.exec(`"${icacls}" "${this.sshKeyPath}" /grant:r "${process.env["USERDOMAIN"]}\\${process.env["USERNAME"]}:F"`);
             await exec.exec(`"${icacls}" "${this.sshKeyPath}" /inheritance:r`);
         }
 
@@ -96,7 +96,7 @@ export class GitAuthHelper {
         try {
             userKnownHosts = (await fs.promises.readFile(userKnownHostsPath)).toString();
         } catch (err) {
-            if (err.code !== "ENOENT") {
+            if ((err as Error & { code: string }).code !== "ENOENT") {
                 throw err;
             }
         }
@@ -144,10 +144,7 @@ export class GitAuthHelper {
 
     private async configureToken(configPath?: string, globalConfig?: boolean): Promise<void> {
         // Validate args
-        assert.ok(
-            (configPath && globalConfig) || (!configPath && !globalConfig),
-            "Unexpected configureToken parameter combinations",
-        );
+        assert.ok((configPath && globalConfig) || (!configPath && !globalConfig), "Unexpected configureToken parameter combinations");
 
         // Default config path
         if (!configPath && !globalConfig) {
@@ -187,7 +184,7 @@ export class GitAuthHelper {
             try {
                 await io.rmRF(keyPath);
             } catch (err) {
-                core.debug(err.message);
+                core.debug((err as Error).message);
                 core.warning(`Failed to remove SSH key '${keyPath}'`);
             }
         }

@@ -7,13 +7,7 @@ import fs from "fs";
 import * as io from "@actions/io";
 import * as toolCache from "@actions/tool-cache";
 import assert from "assert";
-import {
-    IGithubManager,
-    IGithubManagerBranch,
-    IGithubManagerPulls,
-    IGithubManagerRepos,
-    OctokitHttpError,
-} from "./interfaces";
+import { IGithubManager, IGithubManagerBranch, IGithubManagerPulls, IGithubManagerRepos, OctokitHttpError } from "./interfaces";
 
 const IS_WINDOWS = process.platform === "win32";
 
@@ -74,7 +68,7 @@ export class GithubManager implements IGithubManager {
 
                     return true;
                 } catch (error) {
-                    const err: OctokitHttpError = error;
+                    const err: OctokitHttpError = error as OctokitHttpError;
 
                     if (err.name === "HttpError" && err.status === 404) {
                         return false;
@@ -88,14 +82,7 @@ export class GithubManager implements IGithubManager {
 
     get pulls(): IGithubManagerPulls {
         return {
-            create: async (
-                owner: string,
-                repo: string,
-                head: string,
-                base: string,
-                title: string,
-                body: string,
-            ): Promise<void> => {
+            create: async (owner: string, repo: string, head: string, base: string, title: string, body: string): Promise<void> => {
                 try {
                     await this.octokit.pulls.create({
                         owner,
@@ -106,15 +93,11 @@ export class GithubManager implements IGithubManager {
                         body,
                     });
                 } catch (error) {
-                    const err: OctokitHttpError = error;
+                    const err: OctokitHttpError = error as OctokitHttpError;
 
                     core.debug(inspect(err));
 
-                    if (
-                        err.name === "HttpError" &&
-                        (err.message.includes("No commits between") ||
-                            err.message.includes("A pull request already exists for"))
-                    ) {
+                    if (err.name === "HttpError" && (err.message.includes("No commits between") || err.message.includes("A pull request already exists for"))) {
                         core.info(err.message);
 
                         process.exit(0); // there is currently no neutral exit code
@@ -136,9 +119,7 @@ export class GithubManager implements IGithubManager {
             });
 
             if (response.status !== 200) {
-                throw new Error(
-                    `Unexpected response from GitHub API. Status: ${response.status}, Data: ${response.data}`,
-                );
+                throw new Error(`Unexpected response from GitHub API. Status: ${response.status}, Data: ${response.data}`);
             }
 
             return Buffer.from(response.data); // response.data is ArrayBuffer

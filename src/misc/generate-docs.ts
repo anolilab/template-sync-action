@@ -123,8 +123,4 @@ function updateUsage(
     fs.writeFileSync(readmePath, newReadme.join(os.EOL));
 }
 
-updateUsage(
-    "actions/template-sync@v1",
-    path.join(__dirname, "..", "..", "action.yml"),
-    path.join(__dirname, "..", "..", "README.md"),
-);
+updateUsage("actions/template-sync@v1", path.join(__dirname, "..", "..", "action.yml"), path.join(__dirname, "..", "..", "README.md"));

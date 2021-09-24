@@ -29,6 +29,6 @@ export async function cleanup(repositoryPath: string): Promise<void> {
 
         await io.rmRF(repositoryPath);
     } catch (error) {
-        core.setFailed(error.message);
+        core.setFailed((error as Error).message);
     }
 }

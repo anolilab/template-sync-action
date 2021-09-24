@@ -1,91 +1,92 @@
 {
-  "name": "template-sync-action",
-  "version": "1.0.0-alpha.9",
-  "private": true,
-  "description": "Keep your github template fork up to date.",
-  "keywords": [
-    "actions",
-    "node",
-    "setup",
-    "fork",
-    "automation",
-    "sync",
-    "github-template",
-    "github-templates"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/narrowspark/template-sync-action.git"
-  },
-  "license": "MIT",
-  "author": "prisis",
-  "main": "lib/main.js",
-  "scripts": {
-    "postinstall": "husky install",
-    "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
-    "lint": "yarn run lint:eslint && yarn run lint:text",
-    "lint:eslint": "eslint ./src/**/*.ts",
-    "lint:eslint:fix": "eslint --fix ./src/**/*.ts",
-    "lint:staged": "lint-staged",
-    "lint:text": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --dry-run",
-    "lint:text:fix": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --fix",
-    "pack": "ncc build",
-    "test": "jest",
-    "all": "yarn run lint && yarn run build && yarn run pack && yarn test && node lib/misc/generate-docs.js"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "lint-staged": {
-    "*.{js,jsx,less,md,json}": [
-      "prettier --write"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "name": "template-sync-action",
+    "version": "1.0.0-alpha.9",
+    "private": true,
+    "description": "Keep your github template fork up to date.",
+    "keywords": [
+        "actions",
+        "node",
+        "setup",
+        "fork",
+        "automation",
+        "sync",
+        "github-template",
+        "github-templates"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/narrowspark/template-sync-action.git"
+    },
+    "license": "MIT",
+    "author": "prisis",
+    "main": "lib/main.js",
+    "scripts": {
+        "postinstall": "husky install",
+        "build": "tsc && tsc src/misc/generate-docs.ts --outDir ./lib/misc",
+        "lint": "yarn run lint:eslint && yarn run lint:text",
+        "lint:staged": "lint-staged",
+        "lint:text": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --dry-run",
+        "lint:text:fix": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --fix",
+        "fix:lint:eslint": "yarn run lint --fix",
+        "lint:eslint": "cross-env NO_LOGS=true eslint -c ./.eslintrc.cjs --ext .js,.ts,.tsx ./src",
+        "pack": "ncc build",
+        "test": "jest",
+        "all": "yarn run lint && yarn run build && yarn run pack && yarn test && node lib/misc/generate-docs.js"
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
+    },
+    "lint-staged": {
+        "*.{js,jsx,less,md,json}": [
+            "prettier --write"
+        ]
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "dependencies": {
+        "@actions/core": "1.5.0",
+        "@actions/exec": "1.1.0",
+        "@actions/io": "1.1.1",
+        "@actions/tool-cache": "1.7.1",
+        "@octokit/action": "3.17.0",
+        "@octokit/plugin-retry": "3.0.9",
+        "filehound": "1.17.5",
+        "fs-extra": "10.0.0",
+        "uuid": "8.3.2"
+    },
+    "devDependencies": {
+        "@anolilab/eslint-config": "2.1.8",
+        "@anolilab/textlint-config": "2.0.7",
+        "@anolilab/prettier-config": "2.0.4",
+        "@octokit/fixtures": "22.0.0",
+        "@octokit/types": "6.31.0",
+        "@types/bluebird": "3.5.36",
+        "@types/fs-extra": "9.0.13",
+        "@types/jest": "27.0.2",
+        "@types/js-yaml": "4.0.3",
+        "@types/node": "16.9.6",
+        "@types/promise-retry": "1.1.3",
+        "@types/uuid": "8.3.1",
+        "@typescript-eslint/eslint-plugin": "4.31.2",
+        "@typescript-eslint/parser": "4.31.2",
+        "@zeit/ncc": "0.22.3",
+        "eslint": "7.32.0",
+        "eslint-plugin-jest": "24.4.2",
+        "husky": "7.0.2",
+        "jest": "27.2.1",
+        "jest-circus": "27.2.1",
+        "js-yaml": "4.1.0",
+        "prettier": "2.4.1",
+        "ts-jest": "27.0.5",
+        "typescript": "4.4.3",
+        "cross-env": "^7.0.3"
+    },
+    "engines": {
+        "node": ">=12"
     }
-  },
-  "dependencies": {
-    "@actions/core": "1.2.6",
-    "@actions/exec": "1.0.4",
-    "@actions/io": "1.0.2",
-    "@actions/tool-cache": "1.6.1",
-    "@octokit/action": "3.4.0",
-    "@octokit/plugin-retry": "3.0.7",
-    "filehound": "1.17.4",
-    "fs-extra": "9.1.0",
-    "uuid": "8.3.2"
-  },
-  "devDependencies": {
-    "@anolilab/eslint-config": "1.1.3",
-    "@anolilab/textlint-config": "1.0.1",
-    "@anolilab/prettier-config": "1.0.0",
-    "@octokit/fixtures": "21.3.5",
-    "@octokit/types": "6.10.0",
-    "@types/bluebird": "3.5.33",
-    "@types/fs-extra": "9.0.7",
-    "@types/jest": "26.0.20",
-    "@types/js-yaml": "4.0.0",
-    "@types/node": "12.12.70",
-    "@types/promise-retry": "1.1.3",
-    "@types/uuid": "8.3.0",
-    "@typescript-eslint/eslint-plugin": "4.15.1",
-    "@typescript-eslint/parser": "4.15.1",
-    "@zeit/ncc": "0.22.3",
-    "eslint": "7.20.0",
-    "eslint-plugin-jest": "24.1.5",
-    "husky": "5.1.0",
-    "jest": "26.6.3",
-    "jest-circus": "26.6.3",
-    "js-yaml": "4.0.0",
-    "prettier": "2.2.1",
-    "ts-jest": "26.5.1",
-    "typescript": "4.1.5"
-  },
-  "engines": {
-    "node": ">=12"
-  }
 }
