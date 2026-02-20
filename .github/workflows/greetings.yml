@@ -4,11 +4,22 @@ name: "Greetings"
 
 on: ["pull_request", "issues"]
 
+permissions:
+  contents: read
+
 jobs:
     greeting:
+        permissions:
+          issues: write  # for actions/first-interaction to comment on first issue
+          pull-requests: write  # for actions/first-interaction to comment on first PR
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/first-interaction@v1
+            - name: Harden the runner (Audit all outbound calls)
+              uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+              with:
+                egress-policy: audit
+
+            - uses: actions/first-interaction@3c71ce730280171fd1cfb57c00c774f8998586f7 # v1
               with:
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   issue-message: "Awesome! Thank you for taking the time to create your first issue! Please review the [guidelines](https://narrowspark.com/docs/current/contributing)"
