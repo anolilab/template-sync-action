@@ -61,8 +61,8 @@
     },
     "devDependencies": {
         "@anolilab/eslint-config": "26.0.0",
-        "@anolilab/textlint-config": "2.0.9",
-        "@anolilab/prettier-config": "2.0.6",
+        "@anolilab/textlint-config": "3.0.1",
+        "@anolilab/prettier-config": "3.1.2",
         "@octokit/fixtures": "22.0.7",
         "@octokit/types": "6.41.0",
         "@types/bluebird": "3.5.42",
@@ -81,7 +81,7 @@
         "jest": "27.5.1",
         "jest-circus": "27.5.1",
         "js-yaml": "4.1.1",
-        "prettier": "2.8.8",
+        "prettier": "3.8.3",
         "ts-jest": "27.1.5",
         "typescript": "4.9.5",
         "cross-env": "^7.0.3"
