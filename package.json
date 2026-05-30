@@ -64,7 +64,7 @@
         "@anolilab/textlint-config": "8.0.16",
         "@anolilab/prettier-config": "8.0.1",
         "@octokit/fixtures": "22.0.7",
-        "@octokit/types": "8.2.1",
+        "@octokit/types": "14.1.0",
         "@types/bluebird": "3.5.42",
         "@types/fs-extra": "9.0.13",
         "@types/jest": "27.5.2",
