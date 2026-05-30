@@ -1457,13 +1457,13 @@
     is-plain-object "^5.0.0"
     universal-user-agent "^6.0.0"
 
-"@octokit/fixtures@22.0.7":
-  version "22.0.7"
-  resolved "https://registry.yarnpkg.com/@octokit/fixtures/-/fixtures-22.0.7.tgz#f755cf9978134f4dfcffd52e002713e25769097e"
-  integrity sha512-fhcXO1Dg5laQ51j67xqZAoI8yWfiU7H9reu+LiqdrzKq9K65KkF9DfJ1qmQRl7+moXYqqzYcLDHEPiUvkjlSKw==
+"@octokit/fixtures@23.1.2":
+  version "23.1.2"
+  resolved "https://registry.yarnpkg.com/@octokit/fixtures/-/fixtures-23.1.2.tgz#3ad14158700b09e9e527c17938895b698c9e0ec1"
+  integrity sha512-niG+SVffZ/xzojT3CE6M7DlqX7H9aQ75A6Xxjt4N47CkqssKXpSy2k6+Tj5ntcI5uWW2D9POzKxwJDmBfR+sJw==
   dependencies:
     json-diff "^1.0.0"
-    lodash "^4.17.11"
+    lodash "^4.18.1"
     nock "^13.0.0"
     url-template "^3.0.0"
 
@@ -7044,10 +7044,15 @@ lodash.uniqwith@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniqwith/-/lodash.uniqwith-4.5.0.tgz#7a0cbf65f43b5928625a9d4d0dc54b18cadc7ef3"
   integrity sha1-egy/ZfQ7WShiWp1NDcVLGMrcfvM=
 
-lodash@^4.17.11, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21, lodash@^4.7.0:
+lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+lodash@^4.18.1:
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
+  integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
 longest-streak@^2.0.0:
   version "2.0.4"
